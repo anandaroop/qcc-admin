@@ -1,10 +1,27 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { ThemeProvider } from "@chakra-ui/core"
+import Head from "next/head"
+import { ThemeProvider, CSSReset, Box } from "@chakra-ui/core"
+import { Navigation } from "../components/Navigation"
 
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider>
-      <Component {...pageProps} />
+      <CSSReset />
+      <Box p={2}>
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <header>
+          <nav>
+            <Navigation />
+          </nav>
+        </header>
+        <main>
+          <Component {...pageProps} />
+        </main>
+        <footer></footer>
+      </Box>
     </ThemeProvider>
   )
 }
