@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <CSSReset />
-      <Box p={2}>
+      <Box maxW={1200} minH="100vh" margin="auto" py={5} px={5}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
         </Head>
@@ -17,9 +17,11 @@ function MyApp({ Component, pageProps }) {
             <Navigation />
           </nav>
         </header>
+
         <main>
           <Component {...pageProps} />
         </main>
+
         <footer></footer>
       </Box>
     </ThemeProvider>

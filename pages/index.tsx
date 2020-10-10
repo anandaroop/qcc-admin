@@ -1,59 +1,78 @@
-import Head from "next/head"
-
-import { Text } from "@chakra-ui/core"
+import NextLink from "next/link"
+import { Text, Box, Flex, Icon, Heading } from "@chakra-ui/core"
+import { Title } from "../components/Title"
 
 const Home: React.FC = () => {
   return (
     <>
-      <Head>
-        <title>Home | QCC</title>
-      </Head>
+      <Title silent>Home</Title>
 
-      <Text pb={2}>
-        Dolore culpa veniam voluptate aliqua nostrud ex laboris. Id anim esse
-        occaecat exercitation nostrud reprehenderit officia quis Lorem tempor.
-        Magna voluptate reprehenderit ad tempor ad sint. Deserunt officia
-        laborum sint do Lorem commodo excepteur sunt nisi aute aliqua voluptate
-        Lorem anim. Ad duis in cupidatat nostrud voluptate pariatur commodo
-        laboris do fugiat nisi.
+      <Heading as="h2" size="xl" my={4}>
+        Airtable tools
+      </Heading>
+
+      <Text my={4}>
+        The following tools aid in managing the Airtable databases
       </Text>
 
-      <Text pb={2}>
-        Duis consequat culpa ex reprehenderit officia aliquip sit cillum aliquip
-        nisi excepteur consectetur in excepteur. Dolor ex est cillum tempor.
-        Anim laboris ea cupidatat officia sit in deserunt ut fugiat et commodo
-        minim excepteur aliquip. Incididunt Lorem do id qui velit enim voluptate
-        eu veniam nisi occaecat id officia eiusmod. Laborum quis culpa proident
-        aliquip veniam pariatur pariatur voluptate est veniam in.
-      </Text>
+      <Flex flexDir={["column", "row"]} wrap="wrap">
+        <CardLink
+          title="Route planning"
+          href="https://qdsama-maps.vercel.app/evangel"
+          external
+        >
+          <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
+        </CardLink>
 
-      <Text pb={2}>
-        Laboris eiusmod ad proident officia in amet labore quis sunt labore
-        cupidatat ad ea adipisicing. Nisi ullamco magna esse laborum minim
-        consectetur sunt minim est aliqua veniam esse laboris id. Pariatur
-        fugiat qui ullamco tempor amet adipisicing do sunt consequat sunt sit do
-        quis consequat.
-      </Text>
+        <CardLink
+          title="Community Fridges"
+          href="https://qdsama-maps.vercel.app/fridges"
+          external
+        >
+          <Text>Nothing much to see here yet</Text>
+        </CardLink>
 
-      <Text pb={2}>
-        Consectetur cillum consequat culpa mollit sunt eiusmod ad veniam culpa.
-        Proident amet ut excepteur est qui irure nostrud quis quis elit tempor.
-        Mollit dolor cupidatat aliqua aliqua in tempor occaecat fugiat irure.
-        Deserunt cillum ullamco esse enim adipisicing incididunt proident
-        occaecat. Sit veniam ut amet consectetur cillum voluptate nisi occaecat
-        sint qui dolore. Consectetur ex enim occaecat laborum ex voluptate dolor
-        ad anim laborum ut tempor.
-      </Text>
-
-      <Text pb={2}>
-        Sint officia magna dolor veniam mollit sit sunt minim voluptate. Ut
-        reprehenderit qui occaecat occaecat excepteur nulla. Ad fugiat ea elit
-        non proident ullamco. Officia veniam minim eiusmod enim tempor et do
-        aute nulla adipisicing proident Lorem. Enim tempor quis ipsum incididunt
-        ad consequat. Nostrud adipisicing ullamco irure commodo minim aliquip
-        cupidatat non occaecat proident dolore.
-      </Text>
+        <CardLink title="Dedupe" href="/dedupe">
+          <Text>
+            Dedupe the Airtable <strong>Recipients</strong> table
+          </Text>
+        </CardLink>
+      </Flex>
     </>
+  )
+}
+
+interface CardLinkProps {
+  title: string
+  href: string
+  external?: boolean
+}
+
+const CardLink: React.FC<CardLinkProps> = ({
+  title,
+  href,
+  children,
+  external = false,
+}) => {
+  return (
+    <NextLink href={href} passHref>
+      <Box
+        as="a"
+        border="1px"
+        borderColor="red.200"
+        flex={["1", "0 0 31%"]}
+        mb={4}
+        mr={4}
+        p={4}
+        rounded="md"
+        target={external ? "_external" : undefined}
+      >
+        <Heading size="lg" pb={2}>
+          {title} {external && <Icon name="external-link" mx="2px" />}
+        </Heading>
+        {children}
+      </Box>
+    </NextLink>
   )
 }
 
