@@ -1,16 +1,16 @@
 import React from "react"
 import NextLink from "next/link"
 import {
-  Box,
-  Button,
+  // Box,
+  // Button,
   Flex,
   Heading,
-  Icon,
+  // Icon,
   Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  // Menu,
+  // MenuButton,
+  // MenuItem,
+  // MenuList,
 } from "@chakra-ui/core"
 
 export const Navigation: React.FC = () => {
@@ -25,6 +25,7 @@ export const Navigation: React.FC = () => {
           Queens Care Collective
         </Link>
       </Heading>
+      {/*
       <Flex>
         <Menu>
           <MenuButton as={Button} rightIcon="chevron-down">
@@ -55,6 +56,7 @@ export const Navigation: React.FC = () => {
           </MenuList>
         </Menu>
       </Flex>
+      */}
     </Flex>
   )
 }
