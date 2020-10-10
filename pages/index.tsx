@@ -34,7 +34,7 @@ const Home: React.FC = () => {
 
         <CardLink title="Dedupe" href="/dedupe">
           <Text>
-            Dedupe the Airtable <strong>Recipients</strong> table
+            Dedupe the Airtable <strong>Requesters</strong> table
           </Text>
         </CardLink>
       </Flex>
