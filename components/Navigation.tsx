@@ -1,7 +1,17 @@
 import React from "react"
-import { Box, Button, Flex, Heading, Icon, Link } from "@chakra-ui/core"
-
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core"
+import NextLink from "next/link"
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/core"
 
 export const Navigation: React.FC = () => {
   return (
@@ -11,7 +21,9 @@ export const Navigation: React.FC = () => {
       alignItems="baseline"
     >
       <Heading as="h1" size="sm" pb={[2, 0]}>
-        Queens Care Collective
+        <Link href="/" as={NextLink}>
+          Queens Care Collective
+        </Link>
       </Heading>
       <Flex>
         <Menu>
