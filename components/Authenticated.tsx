@@ -1,0 +1,33 @@
+import React from "react"
+import { Box, Button, Flex, Spinner, Text } from "@chakra-ui/core"
+import { signIn, useSession } from "next-auth/client"
+
+export const Authenticated: React.FC = ({ children }) => {
+  const [session, loading] = useSession()
+
+  return (
+    <>
+      {session && <>{children}</>}
+
+      {loading && <Spinner />}
+
+      {!session && (
+        <Box>
+          <Flex h="90vh" justify="center" align="center" direction="column">
+            <Button
+              onClick={() => {
+                signIn()
+              }}
+            >
+              Please sign in to continue…
+            </Button>
+            <Text pt={4} color="gray.500">
+              You will be asked to use your Slack account to sign in to this
+              website.
+            </Text>
+          </Flex>
+        </Box>
+      )}
+    </>
+  )
+}

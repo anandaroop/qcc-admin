@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import Airtable from "airtable"
 import { chunk } from "lodash"
+import { getSession } from "next-auth/client"
 
 /*
  * Import this library only on the server side, since it relies on ENV variables
@@ -84,16 +85,32 @@ const getStatistics = (
   }
 }
 
+const authorize = async (req: NextApiRequest) => {
+  const session = await getSession({ req })
+  const hasSession = !!session
+  const hasKey = req.headers["x-api-key"] === process.env.API_KEY
+
+  return hasSession || hasKey
+}
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> => {
-  const fields: RecipientFieldNames[] = ["Phone", "Related To"]
+  // authorize
+  const isAuthorized = await authorize(req)
+  if (!isAuthorized) {
+    res.status(401)
+    return res.end()
+  }
 
+  // query
+  const fields: RecipientFieldNames[] = ["Phone", "Related To"]
   const requesters = (await base("Requesters")
     .select({ fields })
     .all()) as Requesters
 
+  // compute
   const phoneNumberClusters = createPhoneNumberRequestersMap(requesters)
 
   if (req.method === "GET") {

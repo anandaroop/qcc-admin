@@ -1,44 +1,58 @@
 import NextLink from "next/link"
-import { Text, Box, Flex, Icon, Heading } from "@chakra-ui/core"
+import {
+  Text,
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Heading,
+  Spinner,
+} from "@chakra-ui/core"
+import { signIn, signOut, useSession } from "next-auth/client"
 import { Title } from "../components/Title"
+import { Authenticated } from "../components/Authenticated"
 
 const Home: React.FC = () => {
+  const [session, loading] = useSession()
+
   return (
-    <>
+    <Authenticated>
       <Title silent>Home</Title>
 
-      <Heading as="h2" size="xl" my={4}>
-        Airtable tools
-      </Heading>
+      <>
+        <Heading as="h2" size="xl" my={4}>
+          Airtable tools
+        </Heading>
 
-      <Text my={4}>
-        The following tools aid in managing the Airtable databases
-      </Text>
+        <Text my={4}>
+          The following tools aid in managing the Airtable databases
+        </Text>
 
-      <Flex flexDir={["column", "row"]} wrap="wrap">
-        <CardLink
-          title="Route planning"
-          href="https://qdsama-maps.vercel.app/evangel"
-          external
-        >
-          <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
-        </CardLink>
+        <Flex flexDir={["column", "row"]} wrap="wrap">
+          <CardLink
+            title="Route planning"
+            href="https://qdsama-maps.vercel.app/evangel"
+            external
+          >
+            <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
+          </CardLink>
 
-        <CardLink
-          title="Community Fridges"
-          href="https://qdsama-maps.vercel.app/fridges"
-          external
-        >
-          <Text>Nothing much to see here yet</Text>
-        </CardLink>
+          <CardLink
+            title="Community Fridges"
+            href="https://qdsama-maps.vercel.app/fridges"
+            external
+          >
+            <Text>Nothing much to see here yet</Text>
+          </CardLink>
 
-        <CardLink title="Dedupe" href="/dedupe">
-          <Text>
-            Dedupe the Airtable <strong>Requesters</strong> table
-          </Text>
-        </CardLink>
-      </Flex>
-    </>
+          <CardLink title="Dedupe" href="/dedupe">
+            <Text>
+              Dedupe the Airtable <strong>Requesters</strong> table
+            </Text>
+          </CardLink>
+        </Flex>
+      </>
+    </Authenticated>
   )
 }
 
