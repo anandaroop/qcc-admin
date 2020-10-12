@@ -70,22 +70,22 @@ const CardLink: React.FC<CardLinkProps> = ({
 }) => {
   return (
     <NextLink href={href} passHref>
-      <Box
-        as="a"
-        border="1px"
-        borderColor="red.200"
-        flex={["1", "0 0 31%"]}
-        mb={4}
-        mr={4}
-        p={4}
-        rounded="md"
-        target={external ? "_external" : undefined}
-      >
-        <Heading size="lg" pb={2}>
-          {title} {external && <Icon name="external-link" mx="2px" />}
-        </Heading>
-        {children}
-      </Box>
+      <a href={href} target={external ? "_external" : undefined}>
+        <Box
+          border="1px"
+          borderColor="red.200"
+          flex={["1", "0 0 31%"]}
+          mb={4}
+          mr={4}
+          p={4}
+          rounded="md"
+        >
+          <Heading size="lg" pb={2}>
+            {title} {external && <Icon name="external-link" mx="2px" />}
+          </Heading>
+          {children}
+        </Box>
+      </a>
     </NextLink>
   )
 }
