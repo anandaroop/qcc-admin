@@ -1,0 +1,17 @@
+name: Scheduled webhooks
+
+on:
+  schedule:
+    - cron: "28 * * * *"
+
+jobs:
+  webhooks:
+    name: Webhooks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dedupe Requesters
+        uses: joelwmale/webhook-action@aed4f319dce44a4f73cdf0480b94df9e6dfc6cae # v2.0.2 release
+        with:
+          url: https://qcc-admin.vercel.app/api/dedupe
+          headers: '{"X-API-KEY": "${{ secrets.QCC_API_KEY }}"}'
