@@ -1,71 +1,71 @@
-import { decodeGeodata } from "airtable-geojson";
-import { RecipientsModel, RecipientRecord } from "./store/recipients";
-import { DriversModel, DriverRecord } from "./store/drivers";
-import { useStoreState } from "./store";
-import Clipboard from "clipboard";
-import { useEffect } from "react";
+import { decodeGeodata } from "airtable-geojson"
+import { RecipientsModel, RecipientRecord } from "./store/recipients"
+import { DriversModel, DriverRecord } from "./store/drivers"
+import { useStoreState } from "./store"
+import Clipboard from "clipboard"
+import { useEffect } from "react"
 
 export const MARKER_SIZE = {
   TINY: 4,
   REGULAR: 8,
   LARGE: 12,
   HUGE: 16,
-};
+}
 
-const EVANGEL_ADDRESS = "3920 27th St, Long Island City, Queens, NY";
+const EVANGEL_ADDRESS = "3920 27th St, Long Island City, Queens, NY"
 
 interface DriverListProps {
-  driverItems: DriversModel["items"];
-  colorMap: RecipientsModel["colorMap"];
-  itineraryMap: DriversModel["itineraryMap"];
-  markerMap: RecipientsModel["markerMap"];
+  driverItems: DriversModel["items"]
+  colorMap: RecipientsModel["colorMap"]
+  itineraryMap: DriversModel["itineraryMap"]
+  markerMap: RecipientsModel["markerMap"]
 }
 
 export const DriverList: React.FC<DriverListProps> = (props) => {
-  const { driverItems, colorMap, itineraryMap, markerMap } = props;
+  const { driverItems, colorMap, itineraryMap, markerMap } = props
 
-  const isMinimized = useStoreState((state) => state.app.isDriverListMinimized);
+  const isMinimized = useStoreState((state) => state.app.isDriverListMinimized)
 
-  const drivers = Object.values(driverItems);
+  const drivers = Object.values(driverItems)
 
   useEffect(() => {
     const slack = new Clipboard("button.copy-slack", {
       target: function (trigger) {
-        const driverDiv = trigger.parentElement.nextSibling as Element;
-        return driverDiv;
+        const driverDiv = trigger.parentElement.nextSibling as Element
+        return driverDiv
       },
-    });
+    })
 
     const mapquest = new Clipboard("button.copy-mapquest", {
       text: function (trigger) {
-        const driverDiv = trigger.parentElement.nextSibling as HTMLDivElement;
+        const driverDiv = trigger.parentElement.nextSibling as HTMLDivElement
         const recipientAddresses = Array.from(
           driverDiv.querySelectorAll(".recipient .address")
-        ).map((el: HTMLDivElement) => el.dataset.normalizedAddress);
-        const driverHomeAddress = driverDiv.dataset.normalizedAddress;
+        ).map((el: HTMLDivElement) => el.dataset.normalizedAddress)
+        const driverHomeAddress = driverDiv.dataset.normalizedAddress
 
         const route = [
           EVANGEL_ADDRESS,
           ...recipientAddresses,
           driverHomeAddress,
-        ];
-        const text = route.join("\n");
-        console.log(text);
-        return text;
+        ]
+        const text = route.join("\n")
+        console.log(text)
+        return text
       },
-    });
+    })
 
     return () => {
-      slack.destroy();
-      mapquest.destroy();
-    };
-  }, []);
+      slack.destroy()
+      mapquest.destroy()
+    }
+  }, [])
 
   return (
     <div className="driver-list">
       {drivers.map((driver) => {
-        const recipientItinerary = itineraryMap[driver.id];
-        const color = colorMap[driver.id];
+        const recipientItinerary = itineraryMap[driver.id]
+        const color = colorMap[driver.id]
 
         return (
           <Driver
@@ -94,7 +94,7 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
                 />
               ))}
           </Driver>
-        );
+        )
       })}
       <style jsx>{`
         .tick {
@@ -105,37 +105,37 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
 
 interface DriverProps {
-  driver: DriverRecord;
-  color: string;
-  itineraryMap: DriversModel["itineraryMap"];
-  markerMap: RecipientsModel["markerMap"];
+  driver: DriverRecord
+  color: string
+  itineraryMap: DriversModel["itineraryMap"]
+  markerMap: RecipientsModel["markerMap"]
 }
 
 const Driver: React.FC<DriverProps> = (props) => {
-  const { driver, children, markerMap, itineraryMap, color } = props;
+  const { driver, children, markerMap, itineraryMap, color } = props
 
-  const recipientIds = itineraryMap[driver.id]?.map((r) => r.id);
+  const recipientIds = itineraryMap[driver.id]?.map((r) => r.id)
   const theseMarkers = Object.entries(markerMap).reduce(
     (acc, [recipientId, marker]) => {
-      if (recipientIds?.includes(recipientId)) acc.push(marker);
-      return acc;
+      if (recipientIds?.includes(recipientId)) acc.push(marker)
+      return acc
     },
     []
-  );
+  )
   const allOtherMarkers = Object.entries(markerMap).reduce(
     (acc, [recipientId, marker]) => {
-      if (!recipientIds?.includes(recipientId)) acc.push(marker);
-      return acc;
+      if (!recipientIds?.includes(recipientId)) acc.push(marker)
+      return acc
     },
     []
-  );
+  )
 
   try {
-    const geodata = decodeGeodata(driver.fields["Geocode cache"]);
+    const geodata = decodeGeodata(driver.fields["Geocode cache"])
     return (
       <div className="copy-buttons-and-driver">
         <div className="copy-buttons">
@@ -147,12 +147,12 @@ const Driver: React.FC<DriverProps> = (props) => {
           className="driver"
           key={driver.id}
           onMouseEnter={() => {
-            theseMarkers.map((m) => m.setRadius(MARKER_SIZE.LARGE));
-            allOtherMarkers.map((m) => m.setRadius(MARKER_SIZE.TINY));
+            theseMarkers.map((m) => m.setRadius(MARKER_SIZE.LARGE))
+            allOtherMarkers.map((m) => m.setRadius(MARKER_SIZE.TINY))
           }}
           onMouseLeave={() => {
-            theseMarkers.map((m) => m.setRadius(MARKER_SIZE.REGULAR));
-            allOtherMarkers.map((m) => m.setRadius(MARKER_SIZE.REGULAR));
+            theseMarkers.map((m) => m.setRadius(MARKER_SIZE.REGULAR))
+            allOtherMarkers.map((m) => m.setRadius(MARKER_SIZE.REGULAR))
           }}
           data-normalized-address={geodata.o.formattedAddress}
         >
@@ -211,47 +211,47 @@ const Driver: React.FC<DriverProps> = (props) => {
           }
         `}</style>
       </div>
-    );
+    )
   } catch (error) {
-    console.error({ error });
+    console.error({ error })
     return (
       <div>
         <p>⚠️ This driver couldn't be geocoded and shown on the map.</p>
       </div>
-    );
+    )
   }
-};
+}
 
 interface RecipientProps {
-  recipient: RecipientRecord;
-  color: string;
-  markerMap: RecipientsModel["markerMap"];
+  recipient: RecipientRecord
+  color: string
+  markerMap: RecipientsModel["markerMap"]
 }
 
 const Recipient: React.FC<RecipientProps> = (props) => {
-  const { recipient, color, markerMap } = props;
+  const { recipient, color, markerMap } = props
 
-  const tblId = useStoreState((state) => state.recipients.metadata["Table ID"]);
-  const viwId = useStoreState((state) => state.recipients.metadata["View ID"]);
+  const tblId = useStoreState((state) => state.recipients.metadata["Table ID"])
+  const viwId = useStoreState((state) => state.recipients.metadata["View ID"])
 
-  const geodata = decodeGeodata(recipient.fields["Geocode cache"]);
-  const marker = markerMap[recipient.id];
+  const geodata = decodeGeodata(recipient.fields["Geocode cache"])
+  const marker = markerMap[recipient.id]
   const hasNotes = Boolean(
     recipient.fields["Recurring notes"] ||
       recipient.fields["Notes"] ||
       recipient.fields["Dietary restrictions"] ||
       recipient.fields["Language"]
-  );
+  )
 
   return (
     <div
       className="recipient"
       key={recipient.id}
-      onMouseEnter={(e) => {
-        marker.setRadius(MARKER_SIZE.HUGE);
+      onMouseEnter={() => {
+        marker.setRadius(MARKER_SIZE.HUGE)
       }}
-      onMouseLeave={(e) => {
-        marker.setRadius(MARKER_SIZE.LARGE);
+      onMouseLeave={() => {
+        marker.setRadius(MARKER_SIZE.LARGE)
       }}
     >
       <br />
@@ -261,7 +261,10 @@ const Recipient: React.FC<RecipientProps> = (props) => {
           // href={`https://airtable.com/${tblId}/${viwId}/${recipient.id}`}
           style={{ color, cursor: "pointer" }}
           onClick={() => {
-            window.open(`https://airtable.com/${tblId}/${viwId}/${recipient.id}`, "airtable")
+            window.open(
+              `https://airtable.com/${tblId}/${viwId}/${recipient.id}`,
+              "airtable"
+            )
           }}
         >
           {recipient.fields.NameLookup?.[0]}
@@ -369,5 +372,5 @@ const Recipient: React.FC<RecipientProps> = (props) => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

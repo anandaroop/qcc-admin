@@ -1,26 +1,26 @@
-import { useStoreState } from "./store";
-import { AirtableHyperlink } from "./AirtableHyperlink";
+import { useStoreState } from "./store"
+import { AirtableHyperlink } from "./AirtableHyperlink"
 
 export const Warnings = () => {
-  const warnings = useStoreState((state) => state.recipients.warnings);
-  const recipients = useStoreState((state) => state.recipients.items);
-  const metadata = useStoreState((state) => state.recipients.metadata);
+  const warnings = useStoreState((state) => state.recipients.warnings)
+  const recipients = useStoreState((state) => state.recipients.items)
+  const metadata = useStoreState((state) => state.recipients.metadata)
 
   const totalWarningCount = Object.values(warnings)
     .map((arr) => arr.length)
-    .reduce((sum, val) => sum + val, 0);
+    .reduce((sum, val) => sum + val, 0)
 
-  if (totalWarningCount === 0) return null;
+  if (totalWarningCount === 0) return null
 
-  const primaryFieldName = metadata["Primary field name"];
-  const tid = metadata["Table ID"];
-  const vid = metadata["View ID"];
+  const primaryFieldName = metadata["Primary field name"]
+  const tid = metadata["Table ID"]
+  const vid = metadata["View ID"]
   return (
     <>
       <div className="warnings">
         {warnings.missingGeocodes?.length > 0 && (
           <ul>
-            ⚠️ Missing geocodes
+            ⚠️ Missing geocodes
             {warnings.missingGeocodes.map((rid) => {
               return (
                 <li key={rid}>
@@ -28,14 +28,14 @@ export const Warnings = () => {
                     {recipients[rid].fields[primaryFieldName]}
                   </AirtableHyperlink>
                 </li>
-              );
+              )
             })}
           </ul>
         )}
 
         {warnings.missingLatLngs?.length > 0 && (
           <ul>
-            ⚠️ Missing latitude/longitude
+            ⚠️ Missing latitude/longitude
             {warnings.missingLatLngs.map((rid) => {
               return (
                 <li key={rid}>
@@ -43,14 +43,14 @@ export const Warnings = () => {
                     {recipients[rid].fields[primaryFieldName]}
                   </AirtableHyperlink>
                 </li>
-              );
+              )
             })}
           </ul>
         )}
 
         {warnings.genericLatLngs?.length > 0 && (
           <ul>
-            ⚠️ Invalid addresses
+            ⚠️ Invalid addresses
             {warnings.genericLatLngs.map((rid) => {
               return (
                 <li key={rid}>
@@ -58,14 +58,14 @@ export const Warnings = () => {
                     {recipients[rid].fields[primaryFieldName]}
                   </AirtableHyperlink>
                 </li>
-              );
+              )
             })}
           </ul>
         )}
 
         {warnings.unavailableDrivers?.length > 0 && (
           <ul>
-            ⚠️ Incorrect drivers
+            ⚠️ Incorrect drivers
             {warnings.unavailableDrivers.map((rid) => {
               return (
                 <li key={rid}>
@@ -73,7 +73,7 @@ export const Warnings = () => {
                     {recipients[rid].fields[primaryFieldName]}
                   </AirtableHyperlink>
                 </li>
-              );
+              )
             })}
           </ul>
         )}
@@ -92,5 +92,5 @@ export const Warnings = () => {
         }
       `}</style>
     </>
-  );
-};
+  )
+}

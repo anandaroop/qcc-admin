@@ -1,13 +1,13 @@
-import { base } from "../../lib/airtable";
+import { base } from "../../lib/airtable"
 
 const records = async (req, res) => {
-  const { tableName, viewName, primaryFieldName } = req.query;
+  const { tableName, viewName, primaryFieldName } = req.query
 
-  let additionalFieldNames: string = req.query.additionalFieldNames;
-  let additionalFieldNameList: string[] = [];
+  const additionalFieldNames: string = req.query.additionalFieldNames
+  let additionalFieldNameList: string[] = []
 
   if (additionalFieldNames.length > 0) {
-    additionalFieldNameList = additionalFieldNames.split("|");
+    additionalFieldNameList = additionalFieldNames.split("|")
   }
 
   const records = await base(tableName)
@@ -15,10 +15,10 @@ const records = async (req, res) => {
       view: viewName,
       fields: [primaryFieldName, "Geocode cache", ...additionalFieldNameList],
     })
-    .all();
+    .all()
 
-  res.statusCode = 200;
-  res.json(records);
-};
+  res.statusCode = 200
+  res.json(records)
+}
 
 export default records
