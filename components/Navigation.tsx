@@ -20,6 +20,7 @@ export const Navigation: React.FC = () => {
       direction={["column", "row"]}
       justify="space-between"
       alignItems="baseline"
+      h="3rem"
     >
       <Heading as="h1" size="md" pb={[2, 0]}>
         {/* @ts-ignore */}

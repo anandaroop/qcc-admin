@@ -11,7 +11,7 @@ export const Container: React.FC<{
             display: flex;
             flex-direction: ${direction};
             width: 100%;
-            height: calc(100vh - 2rem);
+            height: calc(100vh - 5rem);
             overflow: hidden;
           }
         `}

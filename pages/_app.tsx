@@ -9,7 +9,8 @@ function MyApp({ Component, pageProps }) {
     <Provider session={pageProps.session}>
       <ThemeProvider>
         <CSSReset />
-        <Box maxW={1200} minH="100vh" margin="auto" py={5} px={5}>
+        {/* TODO: restore maxW={1200} for default layout */}
+        <Box minH="100vh" margin="auto" py="1rem" px="1rem">
           <Head>
             <link rel="icon" href="/favicon.ico" />
           </Head>
