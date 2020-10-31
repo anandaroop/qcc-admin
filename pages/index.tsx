@@ -29,11 +29,7 @@ const Home: React.FC = () => {
         </Text>
 
         <Flex flexDir={["column", "row"]} wrap="wrap">
-          <CardLink
-            title="Route planning"
-            href="https://qdsama-maps.vercel.app/evangel"
-            external
-          >
+          <CardLink title="Route planning" href="/evangel">
             <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
           </CardLink>
 
