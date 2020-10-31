@@ -1,12 +1,12 @@
-import { useStoreActions, useStoreState } from "./store";
+import { useStoreActions, useStoreState } from "./store"
 
-export const Summary = () => {
-  const driverItems = useStoreState((state) => state.drivers.items);
-  const recipientCounts = useStoreState((state) => state.recipients.counts);
+export const Summary: React.FC = () => {
+  const driverItems = useStoreState((state) => state.drivers.items)
+  const recipientCounts = useStoreState((state) => state.recipients.counts)
 
-  const isMinimized = useStoreState((state) => state.app.isDriverListMinimized);
-  const maximize = useStoreActions((actions) => actions.app.maximizeDriverList);
-  const minimize = useStoreActions((actions) => actions.app.minimizeDriverList);
+  const isMinimized = useStoreState((state) => state.app.isDriverListMinimized)
+  const maximize = useStoreActions((actions) => actions.app.maximizeDriverList)
+  const minimize = useStoreActions((actions) => actions.app.minimizeDriverList)
 
   return (
     <div className="summary">
@@ -19,8 +19,8 @@ export const Summary = () => {
         className="toggle"
         href="#"
         onClick={(e) => {
-          e.preventDefault();
-          isMinimized ? maximize() : minimize();
+          e.preventDefault()
+          isMinimized ? maximize() : minimize()
         }}
       >
         {isMinimized ? "Maximize" : "Minimize"}
@@ -42,5 +42,5 @@ export const Summary = () => {
         `}
       </style>
     </div>
-  );
-};
+  )
+}

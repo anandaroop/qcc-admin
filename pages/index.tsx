@@ -1,20 +1,9 @@
 import NextLink from "next/link"
-import {
-  Text,
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Heading,
-  Spinner,
-} from "@chakra-ui/core"
-import { signIn, signOut, useSession } from "next-auth/client"
+import { Text, Box, Flex, Icon, Heading } from "@chakra-ui/core"
 import { Title } from "../components/Title"
 import { Authenticated } from "../components/Authenticated"
 
 const Home: React.FC = () => {
-  const [session, loading] = useSession()
-
   return (
     <Authenticated>
       <Title silent>Home</Title>

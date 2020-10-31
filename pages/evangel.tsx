@@ -11,7 +11,7 @@ const AIRTABLE_IDS = {
   RECIPIENTS_VIEW: process.env.NEXT_PUBLIC_AIRTABLE_RECIPIENTS_MAP_VIEW_ID,
 }
 
-export default function Evangel() {
+const Evangel: React.FC = () => {
   return (
     <>
       <Head>
@@ -27,3 +27,5 @@ export default function Evangel() {
     </>
   )
 }
+
+export default Evangel

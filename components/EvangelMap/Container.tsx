@@ -1,4 +1,6 @@
-export const Container = ({ children, direction = "row" }) => {
+export const Container: React.FC<{
+  direction: "row" | "column"
+}> = ({ children, direction = "row" }) => {
   return (
     <>
       <div>{children}</div>
@@ -15,5 +17,5 @@ export const Container = ({ children, direction = "row" }) => {
         `}
       </style>
     </>
-  );
-};
+  )
+}

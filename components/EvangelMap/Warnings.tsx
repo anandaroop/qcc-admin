@@ -1,7 +1,7 @@
 import { useStoreState } from "./store"
 import { AirtableHyperlink } from "./AirtableHyperlink"
 
-export const Warnings = () => {
+export const Warnings: React.FC = () => {
   const warnings = useStoreState((state) => state.recipients.warnings)
   const recipients = useStoreState((state) => state.recipients.items)
   const metadata = useStoreState((state) => state.recipients.metadata)

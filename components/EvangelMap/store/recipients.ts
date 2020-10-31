@@ -1,13 +1,8 @@
 import {
   action,
   Action,
-  actionOn,
-  ActionOn,
   computed,
   Computed,
-  debug,
-  thunk,
-  Thunk,
   thunkOn,
   ThunkOn,
 } from "easy-peasy"
@@ -20,7 +15,6 @@ import { MetaFields } from "../../../lib/airtable"
 import { StoreModel } from "./index"
 import { DriversModel } from "./drivers"
 import { driverPalette } from "../../../lib/palette"
-import { rootCertificates } from "tls"
 
 export interface RecipientFields {
   /** Name lookup for the linked Request table record */
@@ -129,7 +123,7 @@ export interface RecipientsModel {
   // LISTENERS
 
   /** Listen for updates, in order to update itineraries */
-  onItineraryUpdate: ThunkOn<RecipientsModel, any, StoreModel>
+  onItineraryUpdate: ThunkOn<RecipientsModel, never, StoreModel>
 }
 
 export const recipientsModel: RecipientsModel = {

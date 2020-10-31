@@ -15,7 +15,10 @@ interface EvangelMapProps {
   recipientsViewID: string
 }
 
-export const EvangelMap = ({ driversViewID, recipientsViewID }) => {
+export const EvangelMap: React.FC<EvangelMapProps> = ({
+  driversViewID,
+  recipientsViewID,
+}) => {
   const setAllRecipientItems = useStoreActions(
     (actions) => actions.recipients.setAll
   )

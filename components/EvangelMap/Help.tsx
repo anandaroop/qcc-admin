@@ -1,9 +1,9 @@
-import { useStoreState, useStoreActions } from "../EvangelMap/store";
+import { useStoreState, useStoreActions } from "../EvangelMap/store"
 
-export const Help = () => {
-  const isHelpVisible = useStoreState((state) => state.app.isHelpVisible);
-  const showHelp = useStoreActions((actions) => actions.app.showHelp);
-  const hideHelp = useStoreActions((actions) => actions.app.hideHelp);
+export const Help: React.FC = () => {
+  const isHelpVisible = useStoreState((state) => state.app.isHelpVisible)
+  const showHelp = useStoreActions((actions) => actions.app.showHelp)
+  const hideHelp = useStoreActions((actions) => actions.app.hideHelp)
 
   return (
     <>
@@ -219,5 +219,5 @@ export const Help = () => {
         }
       `}</style>
     </>
-  );
-};
+  )
+}

@@ -1,15 +1,15 @@
-import Head from "next/head";
-import { GeoJSON, Map as ReactLeafletMap, TileLayer } from "react-leaflet";
-import { CircleMarker } from "leaflet";
-import { Feature, Point } from "geojson";
+import Head from "next/head"
+import { GeoJSON, Map as ReactLeafletMap, TileLayer } from "react-leaflet"
+import { CircleMarker } from "leaflet"
+import { Feature, Point } from "geojson"
 
-import { useStoreState, useStoreActions } from "./store";
-import { RecipientFields } from "./store/recipients";
+import { useStoreState, useStoreActions } from "./store"
+import { RecipientFields } from "./store/recipients"
 
-const Map = () => {
-  const recipients = useStoreState((state) => state.recipients);
-  const drivers = useStoreState((state) => state.drivers);
-  const recipientActions = useStoreActions((actions) => actions.recipients);
+const Map: React.FC = () => {
+  const recipients = useStoreState((state) => state.recipients)
+  const drivers = useStoreState((state) => state.drivers)
+  const recipientActions = useStoreActions((actions) => actions.recipients)
 
   return (
     <>
@@ -39,13 +39,13 @@ const Map = () => {
             ) => {
               const isInvalidGenericPoint = recipients.warnings.genericLatLngs.includes(
                 feature.id as string
-              );
+              )
 
               if (isInvalidGenericPoint) {
-                return null;
+                return null
               }
 
-              const fillColor = feature.properties["marker-color"] || "gray";
+              const fillColor = feature.properties["marker-color"] || "gray"
 
               const marker = new CircleMarker(latLng, {
                 radius: 8,
@@ -55,22 +55,21 @@ const Map = () => {
                 fillOpacity: 0.5,
               })
                 .bindPopup(airtableHyperlinkFor(feature))
-                .on("mouseover", () => marker.openPopup());
+                .on("mouseover", () => marker.openPopup())
 
               recipientActions.setMarker({
                 recordId: feature.id as string,
                 marker: marker,
-              });
+              })
 
-              return marker;
+              return marker
             }}
           />
 
           <GeoJSON
             data={drivers.geojson}
             pointToLayer={(point: Feature<Point>, latLng) => {
-              const color =
-                recipients.colorMap[point.id as string] || "gray";
+              const color = recipients.colorMap[point.id as string] || "gray"
 
               const marker = new CircleMarker(latLng, {
                 color,
@@ -80,9 +79,9 @@ const Map = () => {
                 fillColor: "transparent",
               })
                 .bindPopup(airtableHyperlinkFor(point))
-                .on("mouseover", () => marker.openPopup());
+                .on("mouseover", () => marker.openPopup())
 
-              return marker;
+              return marker
             }}
           />
         </ReactLeafletMap>
@@ -97,16 +96,16 @@ const Map = () => {
         `}
       </style>
     </>
-  );
-};
+  )
+}
 
 const airtableHyperlinkFor = (feature: Feature<Point>) => {
-  const { recId, viwId, tblId } = feature?.properties?.meta;
+  const { recId, viwId, tblId } = feature?.properties?.meta
 
-  const recordUrl = `https://airtable.com/${tblId}/${viwId}/${recId}`;
-  const linkText = feature.properties.meta.title;
+  const recordUrl = `https://airtable.com/${tblId}/${viwId}/${recId}`
+  const linkText = feature.properties.meta.title
 
-  return `<a href="${recordUrl}" target="airtable">${linkText}</a>`;
-};
+  return `<a href="${recordUrl}" target="airtable">${linkText}</a>`
+}
 
-export default Map; // default bc of dynamic import
+export default Map // default bc of dynamic import

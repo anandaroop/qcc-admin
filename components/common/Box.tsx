@@ -1,4 +1,7 @@
-export const Box = ({ children, direction = "row", flex="1 0 auto" }) => {
+export const Box: React.FC<{
+  direction: "row" | "column"
+  flex: string
+}> = ({ children, direction = "row", flex = "1 0 auto" }) => {
   return (
     <>
       <div>{children}</div>
@@ -13,5 +16,5 @@ export const Box = ({ children, direction = "row", flex="1 0 auto" }) => {
         `}
       </style>
     </>
-  );
-};
+  )
+}

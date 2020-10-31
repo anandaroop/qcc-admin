@@ -4,7 +4,7 @@ import { UnassignedRecipients } from "./UnassignedRecipients"
 import { Warnings } from "./Warnings"
 import { Summary } from "./Summary"
 
-export const InfoSidebar = () => {
+export const InfoSidebar: React.FC = () => {
   const {
     items: recipientItems,
     warnings: { genericLatLngs },
