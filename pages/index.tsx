@@ -39,10 +39,10 @@ const Home: React.FC = () => {
 
           <CardLink
             title="Community Fridges"
-            href="https://qdsama-maps.vercel.app/fridges"
+            href="https://community-fridges.vercel.app/"
             external
           >
-            <Text>Nothing much to see here yet</Text>
+            <Text>Based on the list of fridges we manage in Airtable</Text>
           </CardLink>
 
           <CardLink title="Dedupe" href="/dedupe">
