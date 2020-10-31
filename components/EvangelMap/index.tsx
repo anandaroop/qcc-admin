@@ -1,10 +1,9 @@
 import { useEffect } from "react"
 import dynamic from "next/dynamic"
+import { Box, Flex } from "@chakra-ui/core"
 
 import { useStoreActions } from "./store"
 import { Help } from "./Help"
-import { Container } from "./Container"
-import { Box } from "../common"
 import { InfoSidebar } from "./InfoSidebar"
 import { API } from "../../lib/api"
 
@@ -82,15 +81,15 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
 
   return (
     <>
-      <Container direction="row">
+      <Flex direction="row">
         <Box flex="3">
           <MapWithNoSSR />
         </Box>
-        <Box flex="1">
+        <Box flex="1" height="calc(100vh - 5rem)" minW="25em" overflow="scroll">
           <InfoSidebar />
         </Box>
         <Help />
-      </Container>
+      </Flex>
 
       <style jsx global>
         {`

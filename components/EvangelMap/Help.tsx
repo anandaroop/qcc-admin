@@ -11,8 +11,8 @@ export const Help: React.FC = () => {
     <>
       <Box
         position="absolute"
-        left="1em"
-        bottom="1em"
+        left="2em"
+        bottom="2em"
         zIndex={1000}
         backgroundColor="#ffffffdd"
         boxShadow="0 0 8px #00000033"
