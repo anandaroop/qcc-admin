@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, Flex, Spinner, Text } from "@chakra-ui/core"
+import { Box, Button, Flex, Heading, Spinner, Text } from "@chakra-ui/core"
 import { signIn, useSession } from "next-auth/client"
 
 export const Authenticated: React.FC = ({ children }) => {
@@ -14,6 +14,9 @@ export const Authenticated: React.FC = ({ children }) => {
       {!session && (
         <Box>
           <Flex h="90vh" justify="center" align="center" direction="column">
+            <Heading as="h1" mb={3}>
+              Queens Care Collective
+            </Heading>
             <Button
               onClick={() => {
                 signIn()

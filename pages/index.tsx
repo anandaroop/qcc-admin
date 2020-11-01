@@ -1,43 +1,41 @@
 import NextLink from "next/link"
 import { Text, Box, Flex, Icon, Heading } from "@chakra-ui/core"
 import { Title } from "../components/Title"
-import { Authenticated } from "../components/Authenticated"
+import { Layout } from "../components/Layout"
 
 const Home: React.FC = () => {
   return (
-    <Authenticated>
+    <Layout>
       <Title silent>Home</Title>
 
-      <>
-        <Heading as="h2" size="xl" my={4}>
-          Airtable tools
-        </Heading>
+      <Heading as="h2" size="xl" my={4}>
+        Airtable tools
+      </Heading>
 
-        <Text my={4}>
-          The following tools aid in managing the Airtable databases
-        </Text>
+      <Text my={4}>
+        The following tools aid in managing the Airtable databases
+      </Text>
 
-        <Flex flexDir={["column", "row"]} wrap="wrap">
-          <CardLink title="Route planning" href="/evangel">
-            <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
-          </CardLink>
+      <Flex flexDir={["column", "row"]} wrap="wrap">
+        <CardLink title="Route planning" href="/evangel">
+          <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
+        </CardLink>
 
-          <CardLink
-            title="Community Fridges"
-            href="https://community-fridges.vercel.app/"
-            external
-          >
-            <Text>Based on the list of fridges we manage in Airtable</Text>
-          </CardLink>
+        <CardLink
+          title="Community Fridges"
+          href="https://community-fridges.vercel.app/"
+          external
+        >
+          <Text>Based on the list of fridges we manage in Airtable</Text>
+        </CardLink>
 
-          <CardLink title="Dedupe" href="/dedupe">
-            <Text>
-              Dedupe the Airtable <strong>Requesters</strong> table
-            </Text>
-          </CardLink>
-        </Flex>
-      </>
-    </Authenticated>
+        <CardLink title="Dedupe" href="/dedupe">
+          <Text>
+            Dedupe the Airtable <strong>Requesters</strong> table
+          </Text>
+        </CardLink>
+      </Flex>
+    </Layout>
   )
 }
 

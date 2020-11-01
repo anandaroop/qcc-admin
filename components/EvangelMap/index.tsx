@@ -6,6 +6,8 @@ import { useStoreActions } from "./store"
 import { Help } from "./Help"
 import { InfoSidebar } from "./InfoSidebar"
 import { API } from "../../lib/api"
+import { DriverFields } from "./store/drivers"
+import { RecipientFields } from "./store/recipients"
 
 const MapWithNoSSR = dynamic(() => import("./Map"), { ssr: false })
 
@@ -40,7 +42,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
       setDriverMetadata({ data: driversView.fields })
 
       // fetch driver records
-      const driverRecords = await API.fetchRecordsFromView({
+      const driverRecords = await API.fetchRecordsFromView<DriverFields>({
         tableName: driversView.fields["Table name"],
         viewName: driversView.fields["View name"],
         additionalFieldNames: ["Name"],
@@ -55,7 +57,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
       setRecipientMetadata({ data: recipientsView.fields })
 
       // fetch recipient records
-      const recipientRecords = await API.fetchRecordsFromView({
+      const recipientRecords = await API.fetchRecordsFromView<RecipientFields>({
         tableName: recipientsView.fields["Table name"],
         viewName: recipientsView.fields["View name"],
         primaryFieldName: recipientsView.fields["Primary field name"],
@@ -93,7 +95,8 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
 
       <style jsx global>
         {`
-          * {
+           {
+            /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -111,6 +114,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
           ol,
           ul {
             padding-left: 1.5em;
+          } */
           }
         `}
       </style>

@@ -1,6 +1,7 @@
-import Head from "next/head"
 import { StoreProvider } from "easy-peasy"
 
+import { Layout } from "../components/Layout"
+import { Title } from "../components/Title"
 import { EvangelMap } from "../components/EvangelMap"
 import { store } from "../components/EvangelMap/store"
 
@@ -13,10 +14,8 @@ const AIRTABLE_IDS = {
 
 const Evangel: React.FC = () => {
   return (
-    <>
-      <Head>
-        <title>QDSAMA: Evangel</title>
-      </Head>
+    <Layout>
+      <Title silent>Route planning</Title>
 
       <StoreProvider store={store}>
         <EvangelMap
@@ -24,7 +23,7 @@ const Evangel: React.FC = () => {
           recipientsViewID={AIRTABLE_IDS.RECIPIENTS_VIEW}
         />
       </StoreProvider>
-    </>
+    </Layout>
   )
 }
 
