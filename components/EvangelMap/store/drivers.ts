@@ -13,7 +13,7 @@ import { MetaFields } from "../../../lib/airtable"
 import { StoreModel } from "./index"
 import { RecipientRecord } from "./recipients"
 
-interface DriverFields {
+export interface DriverFields {
   Name: string
 
   /** Geocoded address, encoded */

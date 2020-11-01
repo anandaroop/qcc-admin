@@ -7,7 +7,7 @@ export const API = {
     return json
   },
 
-  fetchRecordsFromView: async ({
+  fetchRecordsFromView: async <F>({
     tableName,
     viewName,
     primaryFieldName,
@@ -17,7 +17,7 @@ export const API = {
     viewName: string
     primaryFieldName: string
     additionalFieldNames?: string[]
-  }): Promise<Airtable.Record<unknown>[]> => {
+  }): Promise<Airtable.Record<F>[]> => {
     const params = new URLSearchParams([
       ["tableName", tableName],
       ["viewName", viewName],
