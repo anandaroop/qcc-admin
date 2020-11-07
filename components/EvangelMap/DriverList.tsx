@@ -171,7 +171,7 @@ const Driver: React.FC<DriverProps> = (props) => {
           .copy-buttons {
             position: absolute;
             right: 0.2em;
-            top: 1.2em;
+            top: 1em;
           }
 
           .copy-buttons button {
@@ -180,6 +180,7 @@ const Driver: React.FC<DriverProps> = (props) => {
             color: white;
             border-radius: 0.25em;
             padding: 0 0.25em;
+            font-size: 0.8em;
             height: 1.6em;
             margin-left: 0.25em;
             opacity: 0.75;
@@ -332,7 +333,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
         }
 
         .address {
-          padding: 0.25em 0;
+          padding: 0.125em 0;
         }
 
         .address a {
@@ -341,7 +342,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
         }
 
         .phone {
-          padding: 0.25em 0;
+          padding: 0.125em 0;
         }
 
         .whatsapp-warning {
@@ -358,7 +359,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
           font-weight: bold;
           font-size: 80%;
           color: #999;
-          margin: 0.5em 0;
+          margin: 0.25em 0;
         }
 
         ul.notes li.body {
