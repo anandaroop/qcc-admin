@@ -27,9 +27,9 @@ export const Help: React.FC = () => {
                 Airtable Map Viewer for Evangel Deliveries
               </Heading>
 
-              <Text>Check out the notes below.</Text>
+              <Text my={3}>Check out the notes below.</Text>
 
-              <Text>
+              <Text my={3}>
                 If you still have questions drop em in the the{" "}
                 {/* TODO: figure out how to color hyperlinks?! */}
                 <Text as="span" textDecoration="underline">
@@ -40,16 +40,16 @@ export const Help: React.FC = () => {
                 channel
               </Text>
 
-              <Heading as="h3" fontSize="18px">
+              <Heading as="h3" mt={4} fontSize="18px">
                 What this is
               </Heading>
 
-              <Text>
+              <Text my={3}>
                 This map app provides a friendlier view into the Airtable tables
                 we use to manage deliveries.
               </Text>
 
-              <Text>
+              <Text my={3}>
                 All <em>updates</em> to driving assignments are still made in
                 the Airtable interface, but this map interface should make it
                 much easier to <em>visualize</em> what drivers are available,
@@ -57,11 +57,11 @@ export const Help: React.FC = () => {
                 which stops still need to be assigned, and so on.
               </Text>
 
-              <Heading as="h3" fontSize="18px">
+              <Heading as="h3" mt={4} fontSize="18px">
                 How to use this
               </Heading>
 
-              <Text>
+              <Text my={3}>
                 There are basically two different ways to get this done:
               </Text>
 
@@ -80,7 +80,7 @@ export const Help: React.FC = () => {
                   <strong>Driver</strong> column. Refresh this map view
                   frequently, to see the current state of the assignments.
                 </ListItem>
-                <ListItem>
+                <ListItem my={3}>
                   Hover over the map markers to see a link to the associated
                   Airtable record. Click through to open that individual record
                   and assign a driver. (You'll have to scroll down to the{" "}
@@ -89,7 +89,7 @@ export const Help: React.FC = () => {
                 </ListItem>
               </List>
 
-              <Text>
+              <Text my={3}>
                 <svg
                   height="20"
                   width="20"
@@ -125,7 +125,7 @@ export const Help: React.FC = () => {
                 assigned; then they will be color-coded to match their driver.
               </Text>
 
-              <Text>
+              <Text my={3}>
                 Once all assignments are done, use the{" "}
                 <LilButton>Mapquest</LilButton> button to copy a driver
                 itinerary into{" "}
@@ -145,28 +145,28 @@ export const Help: React.FC = () => {
                 optimized itinerary.
               </Text>
 
-              <Text>
+              <Text my={3}>
                 Once all itineraries are complete, use the{" "}
                 <LilButton>Slack</LilButton> button to copy a driver itinerary
                 for pasting into Slack.
               </Text>
 
-              <Heading as="h3" fontSize="18px">
+              <Heading as="h3" mt={4} fontSize="18px">
                 Pre-preparation
               </Heading>
 
-              <Text>
+              <Text my={3}>
                 If you are about to do route planning, this has probably already
                 been done for you, but just in case…
               </Text>
 
-              <Text>
+              <Text my={3}>
                 These steps need to be performed beforehand, to get the tool set
                 up for the next round of deliveries
               </Text>
 
-              <ul>
-                <ListItem>
+              <List as="ol" pl="1em" styleType="decimal" stylePos="outside">
+                <ListItem my={3}>
                   Change filter on the view{" "}
                   <strong>
                     Volunteers: <em>Current Delivery Drivers Map</em>
@@ -175,7 +175,7 @@ export const Help: React.FC = () => {
                   2020-07-07`
                 </ListItem>
 
-                <ListItem>
+                <ListItem my={3}>
                   Change filter on the view{" "}
                   <strong>
                     Delivery Recipients: <em>Map</em>
@@ -183,7 +183,7 @@ export const Help: React.FC = () => {
                   to match the name of the upcoming delivery, e.g. `Evangel -
                   2020-07-07`
                 </ListItem>
-                <ListItem>
+                <ListItem my={3}>
                   Double check that the Map App in{" "}
                   <strong>
                     Maps: Coordinated Deliveries &gt;{" "}
@@ -192,7 +192,7 @@ export const Help: React.FC = () => {
                   is configured correctly (i.e. pulling from the Map view)
                 </ListItem>
 
-                <ListItem>
+                <ListItem my={3}>
                   Double check that the Map App in{" "}
                   <strong>
                     Maps: Coordinated Deliveries &gt;{" "}
@@ -201,9 +201,9 @@ export const Help: React.FC = () => {
                   is configured correctly (i.e. pulling from the Current
                   Delivery Drivers Map view)
                 </ListItem>
-              </ul>
+              </List>
 
-              <Text>
+              <Text my={3}>
                 <em>
                   NOTE: Sometimes it seems that simply opening the the Map App
                   configuration is necessary to kick off geocoding of all the
