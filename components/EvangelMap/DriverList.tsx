@@ -12,7 +12,7 @@ export const MARKER_SIZE = {
   HUGE: 16,
 }
 
-const EVANGEL_ADDRESS = "3920 27th St, Long Island City, Queens, NY"
+const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
 
 interface DriverListProps {
   driverItems: DriversModel["items"]
@@ -45,7 +45,7 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
         const driverHomeAddress = driverDiv.dataset.normalizedAddress
 
         const route = [
-          EVANGEL_ADDRESS,
+          PICKUP_LOCATION,
           ...recipientAddresses,
           driverHomeAddress,
         ]
