@@ -11,10 +11,10 @@ import { createFeatureCollection } from "airtable-geojson"
 import { CircleMarker } from "leaflet"
 import { point, distance } from "@turf/turf"
 
-import { MetaFields } from "../../../lib/airtable"
 import { StoreModel } from "./index"
 import { DriversModel } from "./drivers"
 import { driverPalette } from "../../../lib/palette"
+import { AirtableRecordMetadata, MetaFields } from "../../../lib/airtable"
 
 export interface RecipientFields {
   /** Name lookup for the linked Request table record */
@@ -88,7 +88,10 @@ export interface RecipientsModel {
   metadata: MetaFields
 
   /** Memoized GeoJSON representation of records */
-  geojson: Computed<RecipientsModel, FeatureCollection<Point, RecipientFields>>
+  geojson: Computed<
+    RecipientsModel,
+    FeatureCollection<Point, RecipientFields & AirtableRecordMetadata>
+  >
 
   /** Mapping of driver IDs to colors */
   colorMap: {
@@ -211,7 +214,10 @@ export const recipientsModel: RecipientsModel = {
           return state.colorMap[driverId]
         },
       })
-      return featureCollection
+      return featureCollection as FeatureCollection<
+        Point,
+        RecipientFields & AirtableRecordMetadata
+      >
     }
   }),
 
