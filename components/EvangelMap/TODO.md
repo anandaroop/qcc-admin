@@ -7,6 +7,6 @@
   - [x] highlight generic point! (suppress instead)
   - [x] bring recur col into driver list
   - [x] dietary field too
-  - [ ] Slack oauth
-  - [ ] marker clustering
-  - [ ] change pin shape after assignment (to show duplicates better)
+  - [x] Slack oauth
+  - [x] marker clustering
+  - [ ] better ORM
