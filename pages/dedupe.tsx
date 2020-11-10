@@ -3,7 +3,7 @@ import { Text } from "@chakra-ui/core"
 
 import { Title } from "../components/Title"
 import { StepButton, StepFeedback, StepProps } from "../components/Steps"
-import { Authenticated } from "../components/Authenticated"
+import { Layout } from "../components/Layout"
 
 /** A list of valid statuses for this multi-step process. Off-brand version of a state machine. */
 type Status =
@@ -22,7 +22,7 @@ const Dedupe: React.FC = () => {
   const [status, setStatus] = React.useState<Status>("waiting")
 
   return (
-    <Authenticated>
+    <Layout>
       <Title>Deduper</Title>
 
       <Text my={4}>
@@ -33,7 +33,7 @@ const Dedupe: React.FC = () => {
       <Step1 status={status} setStatus={setStatus} />
 
       <Step2 status={status} setStatus={setStatus} />
-    </Authenticated>
+    </Layout>
   )
 }
 
