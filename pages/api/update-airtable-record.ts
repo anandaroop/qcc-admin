@@ -26,14 +26,12 @@ const records = async (
 
       //
 
-      const response = await base(tableIdOrName).update([
-        {
-          id: recordId,
-          fields: JSON.parse(req.body),
-        },
-      ])
+      const response = await base(tableIdOrName).update(
+        recordId,
+        JSON.parse(req.body)
+      )
 
-      console.log(response)
+      console.log("?!?!", response)
 
       //
 
