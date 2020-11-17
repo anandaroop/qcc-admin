@@ -1,4 +1,4 @@
-import useSWR from "swr"
+import useSWR, { responseInterface } from "swr"
 import { stringifyUrl } from "query-string"
 
 import { AirtableRecordParams } from "../../types"
@@ -15,10 +15,16 @@ interface Response<TFields> {
 
   /** True if the request has errored */
   isError: boolean
+
+  /** Mutate function, bound to SWR cache key */
+  mutate: responseInterface<
+    Airtable.Record<TFields>,
+    AirtableRecordException
+  >["mutate"]
 }
 
 /**
- * useAirtableRecord will return an Airtable record in its entirety.
+ * An SWR data fetching hook that will return an Airtable record in its entirety.
  *
  * Do not use if you wish to avoid sending some fields over the wire.
  */
@@ -37,13 +43,14 @@ export const useAirtableRecord = <TFields>({
     }
   )
 
-  const { data, error } = useSWR(url, fetcher)
+  const { data, error, mutate } = useSWR(url, fetcher)
 
   return {
     record: data,
     error,
     isLoading: !error && !data,
     isError: !!error,
+    mutate,
   }
 }
 
