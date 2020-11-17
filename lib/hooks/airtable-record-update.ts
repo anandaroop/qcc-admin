@@ -3,12 +3,14 @@ import { stringifyUrl } from "query-string"
 import { AirtableRecordParams } from "../../types"
 
 interface Response<TFields> {
-  /** A function to perform the update and return the updated record */
+  /** A function to perform the update and promise the updated record */
   updateRecord: (fields: Partial<TFields>) => Promise<Airtable.Record<TFields>>
 }
 
 /**
- * A hook that provides function to update and return an Airtable record
+ * A hook that provides a function to update a given Airtable record.
+ *
+ * Returns a promise for the updated record, which can be used with an SWR mutation.
  */
 export const useAirtableRecordUpdate = <TFields>({
   baseId,
