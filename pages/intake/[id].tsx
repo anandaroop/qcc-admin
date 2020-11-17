@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Box,
@@ -10,10 +10,11 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/core"
+import { useSession } from "next-auth/client"
 
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
-import { useAirtableRecord } from "../../lib/hooks"
+import { useAirtableRecord, useAirtableRecordUpdate } from "../../lib/hooks"
 
 interface RequesterFields {
   ID: string
@@ -21,18 +22,27 @@ interface RequesterFields {
   "Has grocery needs": boolean
   Phone: string
   Notes: string
+  "Intake Notes": string
 }
 
-const TicketPage: React.FC = () => {
+const IntakePage: React.FC = () => {
+  const [session] = useSession()
   const router = useRouter()
   const { id } = router.query
 
-  const { record, error, isLoading, isError } = useAirtableRecord<
+  const { record, error, isLoading, isError, mutate } = useAirtableRecord<
     RequesterFields
   >({
     tableIdOrName: "Requesters",
     recordId: id as string,
   })
+
+  const { updateRecord } = useAirtableRecordUpdate<RequesterFields>({
+    tableIdOrName: "Requesters",
+    recordId: id as string,
+  })
+
+  const newIntakeNotesRef = useRef<HTMLTextAreaElement>()
 
   if (isError)
     return (
@@ -48,19 +58,14 @@ const TicketPage: React.FC = () => {
   if (isLoading)
     return (
       <Layout>
-        <Title>Loading Ticket…</Title>
+        <Title>Loading Intake…</Title>
         <Spinner />
       </Layout>
     )
 
-  const {
-    fields: { Name: name, "Has grocery needs?": grocery, Phone: phone },
-  } = record
-  console.log(name, grocery, phone)
-
   return (
     <Layout>
-      <Title>View Ticket</Title>
+      <Title>Intake Form</Title>
       <Record>
         <Divider />
         <Field>
@@ -80,21 +85,47 @@ const TicketPage: React.FC = () => {
         <Divider />
         <Field>
           <Label>Notes</Label>
-          <Value>{record.fields["Notes"]}</Value>
+          <Value>
+            {record.fields["Notes"]?.trim() || <Text color="#ccc">n/a</Text>}
+          </Value>
+        </Field>
+        <Divider />
+        <Field>
+          <Label>Intake Notes</Label>
+          <Value long>
+            {record.fields["Intake Notes"]?.trim() || (
+              <Text color="#ccc">n/a</Text>
+            )}
+          </Value>
         </Field>
         <Divider />
       </Record>
 
-      <Heading as="h2" fontSize={24}>
-        Complete intake
+      <Heading size="lg" my={2}>
+        Add to intake notes
       </Heading>
-
-      <Text my={2}>Add an intake note</Text>
-      <Textarea my={2} maxW="40em"></Textarea>
+      <Textarea
+        ref={newIntakeNotesRef}
+        my={2}
+        maxW="40em"
+        placeholder="Intake notes"
+      ></Textarea>
       <Button
         my={2}
-        onClick={async () => {
-          alert("would save here...")
+        onClick={() => {
+          const newIntakeNotes = newIntakeNotesRef.current.value.trim()
+
+          if (newIntakeNotes.length > 0) {
+            newIntakeNotesRef.current.value = ""
+            const user = session.user.email
+            const date = new Date().toLocaleDateString()
+            const updatedFields = {
+              "Intake Notes": [record.fields["Intake Notes"], newIntakeNotes]
+                .join(`\n\nOn ${date}, ${user} added:\n\n`)
+                .trim(),
+            }
+            mutate(updateRecord(updatedFields))
+          }
         }}
       >
         Submit
@@ -126,6 +157,11 @@ const Label = ({ children }) => (
   </Text>
 )
 
-const Value = ({ children }) => <Box>{children}</Box>
+const Value: React.FC<{
+  /** Preserve whitespace in long text fields? */
+  long?: boolean
+}> = ({ children, long = false }) => (
+  <Box whiteSpace={long ? "pre-wrap" : undefined}>{children}</Box>
+)
 
-export default TicketPage
+export default IntakePage
