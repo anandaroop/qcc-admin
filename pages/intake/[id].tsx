@@ -9,26 +9,22 @@ import {
   Spinner,
   Text,
   Textarea,
+  Input,
+  Checkbox,
+  useToast,
 } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
 
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
 import { useAirtableRecord, useAirtableRecordUpdate } from "../../lib/hooks"
-
-interface RequesterFields {
-  ID: string
-  Name: string
-  "Has grocery needs": boolean
-  Phone: string
-  Notes: string
-  "Intake Notes": string
-}
+import { RequesterFields } from "../../schemas/requester"
 
 const IntakePage: React.FC = () => {
   const [session] = useSession()
   const router = useRouter()
   const { id } = router.query
+  const toast = useToast()
 
   const { record, error, isLoading, isError, mutate } = useAirtableRecord<
     RequesterFields
@@ -42,6 +38,15 @@ const IntakePage: React.FC = () => {
     recordId: id as string,
   })
 
+  // fields that can be updated via the form
+  const addressRef = useRef<HTMLInputElement>()
+  const numAdultsRef = useRef<HTMLInputElement>()
+  const numChildrenRef = useRef<HTMLInputElement>()
+  const numElderlyRef = useRef<HTMLInputElement>()
+  const groceryNeedsRef = useRef<HTMLInputElement>()
+  const mondayEvangelRef = useRef<HTMLInputElement>()
+  const saturdayEvangelRef = useRef<HTMLInputElement>()
+  const waitlist9mrRef = useRef<HTMLInputElement>()
   const newIntakeNotesRef = useRef<HTMLTextAreaElement>()
 
   if (isError)
@@ -49,8 +54,8 @@ const IntakePage: React.FC = () => {
       <Layout>
         <Title>Error</Title>
         <Text>{error.message}</Text>
-        <Text fontFamily="monospace" my="1em" p="1em" bg="#ff000011">
-          <pre>{JSON.stringify(error.details, null, 2)}</pre>
+        <Text fontFamily="monospace" my="1em" p="1em" bg="#ff000011" as="pre">
+          {JSON.stringify(error.details, null, 2)}
         </Text>
       </Layout>
     )
@@ -58,7 +63,7 @@ const IntakePage: React.FC = () => {
   if (isLoading)
     return (
       <Layout>
-        <Title>Loading Intake…</Title>
+        <Title>Loading Intake Form…</Title>
         <Spinner />
       </Layout>
     )
@@ -67,64 +72,235 @@ const IntakePage: React.FC = () => {
     <Layout>
       <Title>Intake Form</Title>
       <Record>
-        <Divider />
+        <SectionName>Contact Info</SectionName>
+
         <Field>
           <Label>Name</Label>
           <Value>{record.fields["Name"]}</Value>
         </Field>
-        <Divider />
+
         <Field>
-          <Label>Phone</Label>
-          <Value>{record.fields["Phone"]}</Value>
+          <Label>
+            Phone number
+            <Flag>
+              <br />
+              What about email?
+            </Flag>
+          </Label>
+          <Value>{record.fields.Phone}</Value>
         </Field>
-        <Divider />
+
+        <Field>
+          <Label>Language</Label>
+          <Value>{record.fields["Combined languages"]}</Value>
+        </Field>
+
+        <Field>
+          <Label>Which of these ways are best to get in touch with you?</Label>
+          <Value>
+            {
+              record.fields[
+                "Which of these ways are best to get in touch with you?"
+              ]
+            }
+          </Value>
+        </Field>
+
+        <Field bottomBorder={false}>
+          <Label>
+            Point Person
+            <Flag>
+              <br />
+              (can't actually add this as a writeable field)
+            </Flag>
+          </Label>
+          <Value>{record.fields["Point person"]}</Value>
+        </Field>
+
+        <SectionName>Household Info</SectionName>
+
+        <Field>
+          <Label>Address</Label>
+          <Value>
+            {record.fields["Address or cross streets"]}
+            <Input
+              ref={addressRef}
+              width="100%"
+              defaultValue={record.fields["Address or cross streets"]}
+            />
+          </Value>
+        </Field>
+
+        <Field>
+          <Label>Neighborhood</Label>
+          <Value>{record.fields.NeighborhoodLookup?.[0]}</Value>
+        </Field>
+
+        <Field>
+          <Label>
+            Household size{" "}
+            <Flag>
+              <br />
+              (This is in the Request Help form, but the ones below are not.
+              Should all of these be included, and writeable?)
+            </Flag>
+          </Label>
+          <Value>{record.fields["Household size"]}</Value>
+        </Field>
+
+        <Field>
+          <Label># Adults</Label>
+          <Value>
+            <Input
+              ref={numAdultsRef}
+              width="5em"
+              defaultValue={record.fields["# Adults"]}
+            />
+          </Value>
+        </Field>
+
+        <Field>
+          <Label># Children</Label>
+          <Value>
+            <Input
+              ref={numChildrenRef}
+              width="5em"
+              defaultValue={record.fields["# Children"]}
+            />
+          </Value>
+        </Field>
+
+        <Field bottomBorder={false}>
+          <Label># Elderly</Label>
+          <Value>
+            <Input
+              ref={numElderlyRef}
+              width="5em"
+              defaultValue={record.fields["# Elderly"]}
+            />
+          </Value>
+        </Field>
+
+        <SectionName>Needs</SectionName>
+
         <Field>
           <Label>Has grocery needs?</Label>
-          <Value>{record.fields["Has grocery needs"] ? "Yes" : "No"}</Value>
+          <Value>
+            <Checkbox
+              ref={groceryNeedsRef}
+              defaultIsChecked={record.fields["Has grocery needs"]}
+            />
+          </Value>
         </Field>
-        <Divider />
+
         <Field>
-          <Label>Notes</Label>
+          <Label>Monday Evangel Delivery</Label>
+          <Value>
+            <Checkbox
+              ref={mondayEvangelRef}
+              defaultIsChecked={record.fields["Monday Evangel Delivery"]}
+            />
+          </Value>
+        </Field>
+
+        <Field>
+          <Label>Saturday Evangel Delivery</Label>
+          <Value>
+            <Checkbox
+              ref={saturdayEvangelRef}
+              defaultIsChecked={record.fields["Saturday Evangel Delivery"]}
+            />
+          </Value>
+        </Field>
+
+        <Field bottomBorder={false}>
+          <Label>9MR Waitlist</Label>
+          <Checkbox
+            ref={waitlist9mrRef}
+            defaultIsChecked={record.fields["9MR wait list"]}
+          />
+        </Field>
+
+        <SectionName>
+          Notes <Flag>(which one?)</Flag>
+        </SectionName>
+
+        <Field>
+          <Label>
+            Notes <Flag>(?)</Flag>
+          </Label>
           <Value>
             {record.fields["Notes"]?.trim() || <Text color="#ccc">n/a</Text>}
           </Value>
         </Field>
-        <Divider />
-        <Field>
-          <Label>Intake Notes</Label>
+
+        <Field bottomBorder={false}>
+          <Label>
+            Intake Notes <Flag>(?)</Flag>
+          </Label>
           <Value long>
             {record.fields["Intake Notes"]?.trim() || (
               <Text color="#ccc">n/a</Text>
             )}
+            <Textarea
+              ref={newIntakeNotesRef}
+              my={3}
+              maxW="40em"
+              placeholder="Add more intake notes"
+            ></Textarea>
           </Value>
         </Field>
-        <Divider />
       </Record>
 
-      <Heading size="lg" my={2}>
-        Add to intake notes
-      </Heading>
-      <Textarea
-        ref={newIntakeNotesRef}
-        my={2}
-        maxW="40em"
-        placeholder="Intake notes"
-      ></Textarea>
       <Button
         my={2}
-        onClick={() => {
+        onClick={async () => {
           const newIntakeNotes = newIntakeNotesRef.current.value.trim()
+
+          const updatedFields: Partial<RequesterFields> = {}
+
+          updatedFields["Address or cross streets"] = addressRef.current.value
+          updatedFields["# Adults"] = parseInt(numAdultsRef.current.value)
+          updatedFields["# Children"] = parseInt(numChildrenRef.current.value)
+          updatedFields["# Elderly"] = parseInt(numElderlyRef.current.value)
+          updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
+          updatedFields["Monday Evangel Delivery"] =
+            mondayEvangelRef.current.checked
+          updatedFields["Saturday Evangel Delivery"] =
+            saturdayEvangelRef.current.checked
+          updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
 
           if (newIntakeNotes.length > 0) {
             newIntakeNotesRef.current.value = ""
             const user = session.user.email
             const date = new Date().toLocaleDateString()
-            const updatedFields = {
-              "Intake Notes": [record.fields["Intake Notes"], newIntakeNotes]
-                .join(`\n\nOn ${date}, ${user} added:\n\n`)
-                .trim(),
-            }
-            mutate(updateRecord(updatedFields))
+            updatedFields["Intake Notes"] = [
+              record.fields["Intake Notes"],
+              newIntakeNotes,
+            ]
+              .join(`\n\nOn ${date}, ${user} added:\n\n`)
+              .trim()
+          }
+
+          try {
+            const updatedRecord = await updateRecord(updatedFields)
+            mutate(updatedRecord)
+            toast({
+              title: "Record updated",
+              description: "Thanks for adding your updates",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            })
+          } catch (e) {
+            toast({
+              title: e.message || e.toString(),
+              description:
+                "The record could not be updated. If this happens again, feel free to post about this in #mutualaid-data",
+              status: "error",
+              duration: null,
+              isClosable: true,
+            })
           }
         }}
       >
@@ -140,18 +316,29 @@ const Record = ({ children }) => (
   </Flex>
 )
 
-const Field = ({ children }) => (
-  <Flex flexDirection={["column", "row"]} my={"0.5em"}>
+const SectionName = ({ children }) => (
+  <Heading size="lg" bg="#eee" p="0.5em" my="1em">
     {children}
-  </Flex>
+  </Heading>
+)
+
+const Field = ({ children, topBorder = false, bottomBorder = true }) => (
+  <>
+    {topBorder && <Divider />}
+    <Flex flexDirection={["column", "row"]} my={"0.5em"}>
+      {children}
+    </Flex>
+    {bottomBorder && <Divider />}
+  </>
 )
 
 const Label = ({ children }) => (
   <Text
-    flex={["0 0 auto", "0 0 8em"]}
+    flex={["0 0 auto", "0 0 20%"]}
+    minWidth={["auto", "12em"]}
     textAlign={["left", "right"]}
-    fontWeight="bold"
     margin={["0", "0 1em 0 0"]}
+    color="#999"
   >
     {children}
   </Text>
@@ -161,7 +348,18 @@ const Value: React.FC<{
   /** Preserve whitespace in long text fields? */
   long?: boolean
 }> = ({ children, long = false }) => (
-  <Box whiteSpace={long ? "pre-wrap" : undefined}>{children}</Box>
+  <Box
+    flex="1"
+    width="100%"
+    fontWeight="600"
+    whiteSpace={long ? "pre-wrap" : undefined}
+  >
+    {children}
+  </Box>
+)
+
+const Flag: React.FC = ({ children }) => (
+  <span style={{ color: "red" }}>{children}</span>
 )
 
 export default IntakePage
