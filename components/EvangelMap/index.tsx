@@ -73,6 +73,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
           "Language",
           "Phone",
           "Whatsapp Only",
+          "Suggested order",
         ],
       })
       setAllRecipientItems({ data: recipientRecords })

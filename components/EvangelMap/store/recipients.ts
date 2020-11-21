@@ -52,6 +52,9 @@ export interface RecipientFields {
 
   /** Geocoded address, encoded */
   "Geocode cache": string
+
+  /** Suggested order, based on Mapquest route optimizer results */
+  "Suggested order": number
 }
 
 export type RecipientRecord = Airtable.Record<RecipientFields>

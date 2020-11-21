@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import ReactDOM from "react-dom/server"
 import Head from "next/head"
 import { GeoJSON, Map as ReactLeafletMap, TileLayer } from "react-leaflet"
@@ -8,6 +9,7 @@ import { Box, Divider } from "@chakra-ui/core"
 
 import { useStoreState, useStoreActions } from "./store"
 import { RecipientFields } from "./store/recipients"
+import { DriverRecord } from "./store/drivers"
 import { AirtableRecordMetadata } from "../../lib/airtable"
 
 const Map: React.FC = () => {
@@ -65,9 +67,6 @@ const Map: React.FC = () => {
                 return distanceInMeters < 20
               })
 
-              const driverName =
-                drivers.items[feature.properties.Driver?.[0]]?.fields?.Name
-
               const fillColor = feature.properties["marker-color"] || "gray"
 
               const marker = new CircleMarker(latLng, {
@@ -82,7 +81,7 @@ const Map: React.FC = () => {
                     <PopupContent
                       feature={feature}
                       neighbors={neighbors}
-                      driverName={driverName}
+                      drivers={drivers.items}
                     />
                   )
                 )
@@ -144,13 +143,13 @@ export default Map // default bc of dynamic import
 const PopupContent: React.FC<{
   feature: Feature<Point, RecipientFields & AirtableRecordMetadata>
   neighbors: Feature<Point, RecipientFields & AirtableRecordMetadata>[]
-  driverName: string | undefined
-}> = ({ feature, neighbors, driverName }) => {
+  drivers: { [recordId: string]: DriverRecord }
+}> = ({ feature, neighbors, drivers }) => {
   if (neighbors.length === 0)
     return (
       <AirtableRecordLink
         feature={feature}
-        driverName={driverName}
+        drivers={drivers}
       ></AirtableRecordLink>
     )
 
@@ -158,7 +157,7 @@ const PopupContent: React.FC<{
     <Box>
       <AirtableRecordLink
         feature={feature}
-        driverName={driverName}
+        drivers={drivers}
       ></AirtableRecordLink>
       <Divider my={2} borderColor="#999" />
       Other stops at or near this address:
@@ -167,7 +166,7 @@ const PopupContent: React.FC<{
           <Box my={1} key={n.id}>
             <AirtableRecordLink
               feature={n}
-              driverName={driverName}
+              drivers={drivers}
             ></AirtableRecordLink>
           </Box>
         ))}
@@ -178,18 +177,25 @@ const PopupContent: React.FC<{
 
 const AirtableRecordLink: React.FC<{
   feature: Feature<Point, RecipientFields & AirtableRecordMetadata>
-  driverName: string | undefined
-}> = ({ feature, driverName }) => {
+  drivers: { [recordId: string]: DriverRecord }
+}> = ({ feature, drivers }) => {
   const { recId, viwId, tblId } = feature?.properties?.meta
 
-  const recordUrl = `https://airtable.com/${tblId}/${viwId}/${recId}`
   const recipientName = feature.properties.NameLookup?.[0]
+  const assignedDriverName =
+    drivers[feature.properties.Driver?.[0]]?.fields?.Name
+  const suggestedOrder = feature.properties["Suggested order"]
+
+  const recordUrl = `https://airtable.com/${tblId}/${viwId}/${recId}`
 
   return (
     <a href={recordUrl} target="airtable">
       <strong>{recipientName}</strong>
-      {/* eslint-disable-next-line no-irregular-whitespace */}
-      {driverName && <span>[ 🚗   {driverName} ]</span>}
+      {assignedDriverName && (
+        <span>
+          [ 🚗   {assignedDriverName} {suggestedOrder && `#${suggestedOrder}`}]
+        </span>
+      )}
       <style jsx>
         {`
         span {
