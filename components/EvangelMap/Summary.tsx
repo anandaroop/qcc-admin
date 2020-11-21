@@ -22,6 +22,9 @@ export const Summary: React.FC = () => {
           e.preventDefault()
           isMinimized ? maximize() : minimize()
         }}
+        style={{
+          textDecoration: "underline",
+        }}
       >
         {isMinimized ? "Maximize" : "Minimize"}
       </a>
