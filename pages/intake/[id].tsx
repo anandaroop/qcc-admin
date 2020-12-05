@@ -38,10 +38,6 @@ const IntakePage: React.FC = () => {
   })
 
   // fields that can be updated via the form
-  // const addressRef = useRef<HTMLInputElement>()
-  // const numAdultsRef = useRef<HTMLInputElement>()
-  // const numChildrenRef = useRef<HTMLInputElement>()
-  // const numElderlyRef = useRef<HTMLInputElement>()
   const groceryNeedsRef = useRef<HTMLInputElement>()
   const monday9mrRef = useRef<HTMLInputElement>()
   const saturday9mrRef = useRef<HTMLInputElement>()
@@ -108,10 +104,7 @@ const IntakePage: React.FC = () => {
 
         <Field>
           <Label>Address</Label>
-          <Value>
-            {record.fields["Address or cross streets"]}
-            {/* <Input ref={addressRef} width="100%" defaultValue={record.fields["Address or cross streets"]} /> */}
-          </Value>
+          <Value>{record.fields["Address or cross streets"]}</Value>
         </Field>
 
         <Field>
@@ -121,26 +114,17 @@ const IntakePage: React.FC = () => {
 
         <Field>
           <Label># Adults</Label>
-          <Value>
-            {record.fields["# Adults"]}
-            {/* <Input ref={numAdultsRef} width="5em" defaultValue={record.fields["# Adults"]} /> */}
-          </Value>
+          <Value>{record.fields["# Adults"]}</Value>
         </Field>
 
         <Field>
           <Label># Children</Label>
-          <Value>
-            {record.fields["# Children"]}
-            {/* <Input ref={numChildrenRef} width="5em" defaultValue={record.fields["# Children"]} /> */}
-          </Value>
+          <Value>{record.fields["# Children"]}</Value>
         </Field>
 
         <Field bottomBorder={false}>
           <Label># Elderly</Label>
-          <Value>
-            {record.fields["# Elderly"]}
-            {/* <Input ref={numElderlyRef} width="5em" defaultValue={record.fields["# Elderly"]} /> */}
-          </Value>
+          <Value>{record.fields["# Elderly"]}</Value>
         </Field>
 
         <SectionName>Needs</SectionName>
@@ -204,10 +188,6 @@ const IntakePage: React.FC = () => {
 
           const updatedFields: Partial<RequesterFields> = {}
 
-          // updatedFields["Address or cross streets"] = addressRef.current.value
-          // updatedFields["# Adults"] = parseInt(numAdultsRef.current.value)
-          // updatedFields["# Children"] = parseInt(numChildrenRef.current.value)
-          // updatedFields["# Elderly"] = parseInt(numElderlyRef.current.value)
           updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
           updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
           updatedFields["Saturday 9MR Delivery"] =
@@ -298,9 +278,5 @@ const Value: React.FC<{
     {children}
   </Box>
 )
-
-// const Flag: React.FC = ({ children }) => (
-//   <span style={{ color: "red" }}>{children}</span>
-// )
 
 export default IntakePage
