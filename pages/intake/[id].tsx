@@ -9,7 +9,6 @@ import {
   Spinner,
   Text,
   Textarea,
-  Input,
   Checkbox,
   useToast,
 } from "@chakra-ui/core"
@@ -39,15 +38,11 @@ const IntakePage: React.FC = () => {
   })
 
   // fields that can be updated via the form
-  const addressRef = useRef<HTMLInputElement>()
-  const numAdultsRef = useRef<HTMLInputElement>()
-  const numChildrenRef = useRef<HTMLInputElement>()
-  const numElderlyRef = useRef<HTMLInputElement>()
   const groceryNeedsRef = useRef<HTMLInputElement>()
-  const mondayEvangelRef = useRef<HTMLInputElement>()
-  const saturdayEvangelRef = useRef<HTMLInputElement>()
+  const monday9mrRef = useRef<HTMLInputElement>()
+  const saturday9mrRef = useRef<HTMLInputElement>()
   const waitlist9mrRef = useRef<HTMLInputElement>()
-  const newIntakeNotesRef = useRef<HTMLTextAreaElement>()
+  const newNotesRef = useRef<HTMLTextAreaElement>()
 
   if (isError)
     return (
@@ -80,14 +75,13 @@ const IntakePage: React.FC = () => {
         </Field>
 
         <Field>
-          <Label>
-            Phone number
-            <Flag>
-              <br />
-              What about email?
-            </Flag>
-          </Label>
+          <Label>Phone number</Label>
           <Value>{record.fields.Phone}</Value>
+        </Field>
+
+        <Field>
+          <Label>Email</Label>
+          <Value>{record.fields.Email}</Value>
         </Field>
 
         <Field>
@@ -106,29 +100,11 @@ const IntakePage: React.FC = () => {
           </Value>
         </Field>
 
-        <Field bottomBorder={false}>
-          <Label>
-            Point Person
-            <Flag>
-              <br />
-              (can't actually add this as a writeable field)
-            </Flag>
-          </Label>
-          <Value>{record.fields["Point person"]}</Value>
-        </Field>
-
         <SectionName>Household Info</SectionName>
 
         <Field>
           <Label>Address</Label>
-          <Value>
-            {record.fields["Address or cross streets"]}
-            <Input
-              ref={addressRef}
-              width="100%"
-              defaultValue={record.fields["Address or cross streets"]}
-            />
-          </Value>
+          <Value>{record.fields["Address or cross streets"]}</Value>
         </Field>
 
         <Field>
@@ -137,48 +113,18 @@ const IntakePage: React.FC = () => {
         </Field>
 
         <Field>
-          <Label>
-            Household size{" "}
-            <Flag>
-              <br />
-              (This is in the Request Help form, but the ones below are not.
-              Should all of these be included, and writeable?)
-            </Flag>
-          </Label>
-          <Value>{record.fields["Household size"]}</Value>
-        </Field>
-
-        <Field>
           <Label># Adults</Label>
-          <Value>
-            <Input
-              ref={numAdultsRef}
-              width="5em"
-              defaultValue={record.fields["# Adults"]}
-            />
-          </Value>
+          <Value>{record.fields["# Adults"]}</Value>
         </Field>
 
         <Field>
           <Label># Children</Label>
-          <Value>
-            <Input
-              ref={numChildrenRef}
-              width="5em"
-              defaultValue={record.fields["# Children"]}
-            />
-          </Value>
+          <Value>{record.fields["# Children"]}</Value>
         </Field>
 
         <Field bottomBorder={false}>
           <Label># Elderly</Label>
-          <Value>
-            <Input
-              ref={numElderlyRef}
-              width="5em"
-              defaultValue={record.fields["# Elderly"]}
-            />
-          </Value>
+          <Value>{record.fields["# Elderly"]}</Value>
         </Field>
 
         <SectionName>Needs</SectionName>
@@ -194,26 +140,26 @@ const IntakePage: React.FC = () => {
         </Field>
 
         <Field>
-          <Label>Monday Evangel Delivery</Label>
+          <Label>Monday 9MR Delivery</Label>
           <Value>
             <Checkbox
-              ref={mondayEvangelRef}
-              defaultIsChecked={record.fields["Monday Evangel Delivery"]}
+              ref={monday9mrRef}
+              defaultIsChecked={record.fields["Monday 9MR Delivery"]}
             />
           </Value>
         </Field>
 
         <Field>
-          <Label>Saturday Evangel Delivery</Label>
+          <Label>Saturday 9MR Delivery</Label>
           <Value>
             <Checkbox
-              ref={saturdayEvangelRef}
-              defaultIsChecked={record.fields["Saturday Evangel Delivery"]}
+              ref={saturday9mrRef}
+              defaultIsChecked={record.fields["Saturday 9MR Delivery"]}
             />
           </Value>
         </Field>
 
-        <Field bottomBorder={false}>
+        <Field>
           <Label>9MR Waitlist</Label>
           <Checkbox
             ref={waitlist9mrRef}
@@ -221,29 +167,12 @@ const IntakePage: React.FC = () => {
           />
         </Field>
 
-        <SectionName>
-          Notes <Flag>(which one?)</Flag>
-        </SectionName>
-
         <Field>
-          <Label>
-            Notes <Flag>(?)</Flag>
-          </Label>
-          <Value>
-            {record.fields["Notes"]?.trim() || <Text color="#ccc">n/a</Text>}
-          </Value>
-        </Field>
-
-        <Field bottomBorder={false}>
-          <Label>
-            Intake Notes <Flag>(?)</Flag>
-          </Label>
+          <Label>Notes</Label>
           <Value long>
-            {record.fields["Intake Notes"]?.trim() || (
-              <Text color="#ccc">n/a</Text>
-            )}
+            {record.fields["Notes"]?.trim() || <Text color="#ccc">n/a</Text>}
             <Textarea
-              ref={newIntakeNotesRef}
+              ref={newNotesRef}
               my={3}
               maxW="40em"
               placeholder="Add more intake notes"
@@ -255,29 +184,21 @@ const IntakePage: React.FC = () => {
       <Button
         my={2}
         onClick={async () => {
-          const newIntakeNotes = newIntakeNotesRef.current.value.trim()
+          const newNotes = newNotesRef.current.value.trim()
 
           const updatedFields: Partial<RequesterFields> = {}
 
-          updatedFields["Address or cross streets"] = addressRef.current.value
-          updatedFields["# Adults"] = parseInt(numAdultsRef.current.value)
-          updatedFields["# Children"] = parseInt(numChildrenRef.current.value)
-          updatedFields["# Elderly"] = parseInt(numElderlyRef.current.value)
           updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
-          updatedFields["Monday Evangel Delivery"] =
-            mondayEvangelRef.current.checked
-          updatedFields["Saturday Evangel Delivery"] =
-            saturdayEvangelRef.current.checked
+          updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
+          updatedFields["Saturday 9MR Delivery"] =
+            saturday9mrRef.current.checked
           updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
 
-          if (newIntakeNotes.length > 0) {
-            newIntakeNotesRef.current.value = ""
+          if (newNotes.length > 0) {
+            newNotesRef.current.value = ""
             const user = session.user.email
             const date = new Date().toLocaleDateString()
-            updatedFields["Intake Notes"] = [
-              record.fields["Intake Notes"],
-              newIntakeNotes,
-            ]
+            updatedFields["Notes"] = [record.fields["Notes"], newNotes]
               .join(`\n\nOn ${date}, ${user} added:\n\n`)
               .trim()
           }
@@ -356,10 +277,6 @@ const Value: React.FC<{
   >
     {children}
   </Box>
-)
-
-const Flag: React.FC = ({ children }) => (
-  <span style={{ color: "red" }}>{children}</span>
 )
 
 export default IntakePage
