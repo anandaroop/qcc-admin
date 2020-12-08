@@ -39,8 +39,8 @@ const IntakePage: React.FC = () => {
 
   // fields that can be updated via the form
   const groceryNeedsRef = useRef<HTMLInputElement>()
-  const monday9mrRef = useRef<HTMLInputElement>()
-  const saturday9mrRef = useRef<HTMLInputElement>()
+  // const monday9mrRef = useRef<HTMLInputElement>()
+  // const saturday9mrRef = useRef<HTMLInputElement>()
   const waitlist9mrRef = useRef<HTMLInputElement>()
   const newNotesRef = useRef<HTMLTextAreaElement>()
 
@@ -139,7 +139,7 @@ const IntakePage: React.FC = () => {
           </Value>
         </Field>
 
-        <Field>
+        {/* <Field>
           <Label>Monday 9MR Delivery</Label>
           <Value>
             <Checkbox
@@ -147,9 +147,9 @@ const IntakePage: React.FC = () => {
               defaultIsChecked={record.fields["Monday 9MR Delivery"]}
             />
           </Value>
-        </Field>
+        </Field> */}
 
-        <Field>
+        {/* <Field>
           <Label>Saturday 9MR Delivery</Label>
           <Value>
             <Checkbox
@@ -157,7 +157,7 @@ const IntakePage: React.FC = () => {
               defaultIsChecked={record.fields["Saturday 9MR Delivery"]}
             />
           </Value>
-        </Field>
+        </Field> */}
 
         <Field>
           <Label>9MR Waitlist</Label>
@@ -189,9 +189,8 @@ const IntakePage: React.FC = () => {
           const updatedFields: Partial<RequesterFields> = {}
 
           updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
-          updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
-          updatedFields["Saturday 9MR Delivery"] =
-            saturday9mrRef.current.checked
+          // updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
+          // updatedFields["Saturday 9MR Delivery"] = saturday9mrRef.current.checked
           updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
 
           if (newNotes.length > 0) {
