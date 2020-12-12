@@ -13,6 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
+import { isEqual, pick, pickBy } from "lodash"
 
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
@@ -39,8 +40,7 @@ const IntakePage: React.FC = () => {
 
   // fields that can be updated via the form
   const groceryNeedsRef = useRef<HTMLInputElement>()
-  // const monday9mrRef = useRef<HTMLInputElement>()
-  // const saturday9mrRef = useRef<HTMLInputElement>()
+  const immediateFoodNeedsRef = useRef<HTMLInputElement>()
   const waitlist9mrRef = useRef<HTMLInputElement>()
   const newNotesRef = useRef<HTMLTextAreaElement>()
 
@@ -65,7 +65,7 @@ const IntakePage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Intake Form</Title>
+      <Title>Intake Form: {record.fields["First name"]}</Title>
       <Record>
         <SectionName>Contact Info</SectionName>
 
@@ -139,25 +139,15 @@ const IntakePage: React.FC = () => {
           </Value>
         </Field>
 
-        {/* <Field>
-          <Label>Monday 9MR Delivery</Label>
+        <Field>
+          <Label>Needs immediate food delivery?</Label>
           <Value>
             <Checkbox
-              ref={monday9mrRef}
-              defaultIsChecked={record.fields["Monday 9MR Delivery"]}
+              ref={immediateFoodNeedsRef}
+              defaultIsChecked={record.fields["Needs immediate food delivery"]}
             />
           </Value>
-        </Field> */}
-
-        {/* <Field>
-          <Label>Saturday 9MR Delivery</Label>
-          <Value>
-            <Checkbox
-              ref={saturday9mrRef}
-              defaultIsChecked={record.fields["Saturday 9MR Delivery"]}
-            />
-          </Value>
-        </Field> */}
+        </Field>
 
         <Field>
           <Label>9MR Waitlist</Label>
@@ -184,15 +174,16 @@ const IntakePage: React.FC = () => {
       <Button
         my={2}
         onClick={async () => {
-          const newNotes = newNotesRef.current.value.trim()
-
           const updatedFields: Partial<RequesterFields> = {}
 
+          // update simple fields
           updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
-          // updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
-          // updatedFields["Saturday 9MR Delivery"] = saturday9mrRef.current.checked
+          updatedFields["Needs immediate food delivery"] =
+            immediateFoodNeedsRef.current.checked
           updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
 
+          // append new notes, if any
+          const newNotes = newNotesRef.current.value.trim()
           if (newNotes.length > 0) {
             newNotesRef.current.value = ""
             const user = session.user.email
@@ -202,6 +193,29 @@ const IntakePage: React.FC = () => {
               .trim()
           }
 
+          // transition "new" records to "in progress" upon submission,
+          // but only if fields are actually changing
+          const existingFieldsBeforeUpdate = pick(
+            record.fields,
+            Object.keys(updatedFields)
+          )
+          const updatedFieldsWithoutEmpties = pickBy(updatedFields, (value) => {
+            // Airtable omits these empties from the API response,
+            // so we should as well in order to compare
+            return value !== false && value !== null && value !== undefined
+          })
+          const recordIsChanging = !isEqual(
+            existingFieldsBeforeUpdate,
+            updatedFieldsWithoutEmpties
+          )
+          if (
+            recordIsChanging &&
+            record.fields.Status === "New - Needs intake"
+          ) {
+            updatedFields["Status"] = "Intake in progress"
+          }
+
+          // apply the update
           try {
             const updatedRecord = await updateRecord(updatedFields)
             mutate(updatedRecord)

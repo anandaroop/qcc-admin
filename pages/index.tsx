@@ -17,7 +17,11 @@ const Home: React.FC = () => {
       </Text>
 
       <Flex flexDir={["column", "row"]} wrap="wrap">
-        <CardLink title="Route planning" href="/evangel">
+        <CardLink
+          title="Route planning"
+          href="/evangel"
+          disableClientSideNavigation
+        >
           <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
         </CardLink>
 
@@ -43,6 +47,7 @@ interface CardLinkProps {
   title: string
   href: string
   external?: boolean
+  disableClientSideNavigation?: boolean
 }
 
 const CardLink: React.FC<CardLinkProps> = ({
@@ -50,27 +55,36 @@ const CardLink: React.FC<CardLinkProps> = ({
   href,
   children,
   external = false,
+  disableClientSideNavigation = false,
 }) => {
-  return (
-    <NextLink href={href} passHref>
-      <a href={href} target={external ? "_external" : undefined}>
-        <Box
-          border="1px"
-          borderColor="red.200"
-          flex={["1", "0 0 31%"]}
-          mb={4}
-          mr={4}
-          p={4}
-          rounded="md"
-        >
-          <Heading size="lg" pb={2}>
-            {title} {external && <Icon name="external-link" mx="2px" />}
-          </Heading>
-          {children}
-        </Box>
-      </a>
-    </NextLink>
+  const link = (
+    <a href={href} target={external ? "_external" : undefined}>
+      <Box
+        border="1px"
+        borderColor="red.200"
+        flex={["1", "0 0 31%"]}
+        mb={4}
+        mr={4}
+        p={4}
+        rounded="md"
+      >
+        <Heading size="lg" pb={2}>
+          {title} {external && <Icon name="external-link" mx="2px" />}
+        </Heading>
+        {children}
+      </Box>
+    </a>
   )
+
+  if (disableClientSideNavigation) {
+    return link
+  } else {
+    return (
+      <NextLink href={href} passHref>
+        {link}
+      </NextLink>
+    )
+  }
 }
 
 export default Home
