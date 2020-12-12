@@ -65,7 +65,7 @@ const IntakePage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Intake Form</Title>
+      <Title>Intake Form: {record.fields["First name"]}</Title>
       <Record>
         <SectionName>Contact Info</SectionName>
 

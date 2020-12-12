@@ -6,10 +6,11 @@ interface Props {
   silent?: boolean
 }
 export const Title: React.FC<Props> = ({ children, silent = false }) => {
+  const title = React.Children.toArray(children).join("")
   return (
     <>
       <Head>
-        <title>{children} | QCC</title>
+        <title>{title} | QCC</title>
       </Head>
 
       {!silent && (
