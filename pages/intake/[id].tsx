@@ -13,6 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/core"
 import { useSession } from "next-auth/client"
+import { isEqual, pick, pickBy } from "lodash"
 
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
@@ -184,15 +185,16 @@ const IntakePage: React.FC = () => {
       <Button
         my={2}
         onClick={async () => {
-          const newNotes = newNotesRef.current.value.trim()
-
           const updatedFields: Partial<RequesterFields> = {}
 
+          // update simple fields
           updatedFields["Has grocery needs"] = groceryNeedsRef.current.checked
           // updatedFields["Monday 9MR Delivery"] = monday9mrRef.current.checked
           // updatedFields["Saturday 9MR Delivery"] = saturday9mrRef.current.checked
           updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
 
+          // append new notes, if any
+          const newNotes = newNotesRef.current.value.trim()
           if (newNotes.length > 0) {
             newNotesRef.current.value = ""
             const user = session.user.email
@@ -202,6 +204,29 @@ const IntakePage: React.FC = () => {
               .trim()
           }
 
+          // transition "new" records to "in progress" upon submission,
+          // but only if fields are actually changing
+          const existingFieldsBeforeUpdate = pick(
+            record.fields,
+            Object.keys(updatedFields)
+          )
+          const updatedFieldsWithoutEmpties = pickBy(updatedFields, (value) => {
+            // Airtable omits these empties from the API response,
+            // so we should as well in order to compare
+            return value !== false && value !== null && value !== undefined
+          })
+          const recordIsChanging = !isEqual(
+            existingFieldsBeforeUpdate,
+            updatedFieldsWithoutEmpties
+          )
+          if (
+            recordIsChanging &&
+            record.fields.Status === "New - Needs intake"
+          ) {
+            updatedFields["Status"] = "Intake in progress"
+          }
+
+          // apply the update
           try {
             const updatedRecord = await updateRecord(updatedFields)
             mutate(updatedRecord)
