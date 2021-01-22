@@ -44,9 +44,6 @@ export interface RecipientFields {
   /** Phone lookup for the linked Request table record */
   Phone: string[]
 
-  /** WhatsApp lookup for the linked Request table record */
-  "Whatsapp Only": boolean[]
-
   /** Best address */
   "Address (computed)": string
 
