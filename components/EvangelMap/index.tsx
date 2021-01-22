@@ -72,7 +72,6 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
           "Dietary restrictions",
           "Language",
           "Phone",
-          "Whatsapp Only",
           "Suggested order",
         ],
       })

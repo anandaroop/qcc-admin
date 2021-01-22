@@ -288,12 +288,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
           </a>
         </div>
 
-        <div className="phone">
-          {recipient.fields.Phone?.[0]}{" "}
-          {recipient.fields["Whatsapp Only"]?.[0] && (
-            <span className="whatsapp-warning">⚠️ WhatsApp only</span>
-          )}
-        </div>
+        <div className="phone">{recipient.fields.Phone?.[0]}</div>
 
         {hasNotes && (
           <>
@@ -344,11 +339,6 @@ const Recipient: React.FC<RecipientProps> = (props) => {
 
         .phone {
           padding: 0.125em 0;
-        }
-
-        .whatsapp-warning {
-          opacity: 0.6;
-          padding-left: 0.25em;
         }
 
         ul.notes {
