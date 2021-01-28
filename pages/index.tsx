@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       <Flex flexDir={["column", "row"]} wrap="wrap">
         <CardLink
           title="Route planning"
-          href="/evangel"
+          href="/route-planning"
           disableClientSideNavigation
         >
           <Text>Plan driver routes for Evangel/9MR food deliveries</Text>
