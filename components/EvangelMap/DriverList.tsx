@@ -12,9 +12,8 @@ export const MARKER_SIZE = {
   HUGE: 16,
 }
 
-const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
-// const PICKUP_LOCATION = "4909 5th St, Long Island City, Queens NY" // Connected Chef
-
+// const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
+const PICKUP_LOCATION = "4909 5th St, Long Island City, Queens NY" // Connected Chef
 interface DriverListProps {
   driverItems: DriversModel["items"]
   colorMap: RecipientsModel["colorMap"]
