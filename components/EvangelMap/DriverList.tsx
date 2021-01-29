@@ -12,9 +12,8 @@ export const MARKER_SIZE = {
   HUGE: 16,
 }
 
-const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
-// const PICKUP_LOCATION = "4909 5th St, Long Island City, Queens NY" // Connected Chef
-
+// const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
+const PICKUP_LOCATION = "4909 5th St, Long Island City, Queens NY" // Connected Chef
 interface DriverListProps {
   driverItems: DriversModel["items"]
   colorMap: RecipientsModel["colorMap"]
@@ -85,15 +84,15 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
                 ))}
               </div>
             )}
-            {!isMinimized &&
-              recipientItinerary?.map((recipient) => (
-                <Recipient
-                  key={recipient.id}
-                  recipient={recipient}
-                  color={color}
-                  markerMap={markerMap}
-                />
-              ))}
+            {recipientItinerary?.map((recipient) => (
+              <Recipient
+                key={recipient.id}
+                recipient={recipient}
+                color={color}
+                markerMap={markerMap}
+                visible={!isMinimized}
+              />
+            ))}
           </Driver>
         )
       })}
@@ -228,10 +227,12 @@ interface RecipientProps {
   recipient: RecipientRecord
   color: string
   markerMap: RecipientsModel["markerMap"]
+  visible?: boolean
 }
 
 const Recipient: React.FC<RecipientProps> = (props) => {
-  const { recipient, color, markerMap } = props
+  const defaults = { visible: true }
+  const { recipient, color, markerMap, visible } = { ...defaults, ...props }
 
   const tblId = useStoreState((state) => state.recipients.metadata["Table ID"])
   const viwId = useStoreState((state) => state.recipients.metadata["View ID"])
@@ -245,8 +246,13 @@ const Recipient: React.FC<RecipientProps> = (props) => {
       recipient.fields["Language"]
   )
 
+  const style = {
+    display: visible ? "block" : "none",
+  }
+
   return (
     <div
+      style={style}
       className="recipient"
       key={recipient.id}
       onMouseEnter={() => {
