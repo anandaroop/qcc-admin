@@ -57,7 +57,7 @@ const Home: React.FC = () => {
           href="/route-planning"
           disableClientSideNavigation
         >
-          <Text>Plan driver routes for 9MR/TCC food deliveries</Text>
+          <Text>Plan driver routes for weekly food deliveries</Text>
         </CardLink>
 
         <CardLink

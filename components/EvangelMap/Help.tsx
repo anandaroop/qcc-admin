@@ -24,7 +24,7 @@ export const Help: React.FC = () => {
             <Toggle onClick={() => hideHelp()}>Close ✕</Toggle>
             <Box maxH="calc(100vh - 10rem - 80px)" overflow="scroll">
               <Heading as="h2" fontSize="24px">
-                Airtable Map Viewer for Evangel Deliveries
+                Airtable Route Planner
               </Heading>
 
               <Text my={3}>Check out the notes below.</Text>
@@ -34,7 +34,7 @@ export const Help: React.FC = () => {
                 {/* TODO: figure out how to color hyperlinks?! */}
                 <Text as="span" textDecoration="underline">
                   <Link href="https://queensdsa.slack.com/archives/C012THPS340">
-                    #mutualaid-data
+                    #mutualaid-data-tech
                   </Link>
                 </Text>{" "}
                 channel
@@ -66,7 +66,7 @@ export const Help: React.FC = () => {
               </Text>
 
               <List as="ol" pl="1em" styleType="decimal" stylePos="outside">
-                <ListItem d="list-item">
+                <ListItem d="list-item" ml={2}>
                   Keep the Airtable{" "}
                   <Text as="span" textDecoration="underline">
                     <Link
@@ -80,7 +80,8 @@ export const Help: React.FC = () => {
                   <strong>Driver</strong> column. Refresh this map view
                   frequently, to see the current state of the assignments.
                 </ListItem>
-                <ListItem my={3}>
+
+                <ListItem my={3} ml={2}>
                   Hover over the map markers to see a link to the associated
                   Airtable record. Click through to open that individual record
                   and assign a driver. (You'll have to scroll down to the{" "}
