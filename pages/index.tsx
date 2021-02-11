@@ -29,7 +29,7 @@ const Home: React.FC = () => {
           external
         >
           <Text>
-            Fill out this form when attending e.g. the weekly all-hands
+            Fill out this form when attending, e.g. the weekly all-hands
             meetings. <PinCode />
           </Text>
         </CardLink>
