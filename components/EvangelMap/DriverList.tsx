@@ -241,7 +241,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
   const marker = markerMap[recipient.id]
   const hasNotes = Boolean(
     recipient.fields["Recipient notes"] ||
-      recipient.fields["Notes"] ||
+      recipient.fields["Delivery notes"] ||
       recipient.fields["Dietary restrictions"] ||
       recipient.fields["Language"]
   )
@@ -300,8 +300,8 @@ const Recipient: React.FC<RecipientProps> = (props) => {
           <>
             <ul className="notes">
               <div className="header">NOTES</div>
-              {recipient.fields["Notes"] && (
-                <li className="body">{recipient.fields.Notes}</li>
+              {recipient.fields["Delivery notes"] && (
+                <li className="body">{recipient.fields["Delivery notes"]}</li>
               )}
               {recipient.fields["Recipient notes"] && (
                 <li className="body">{recipient.fields["Recipient notes"]}</li>

@@ -27,7 +27,7 @@ export interface RecipientFields {
   "Confirmed?": boolean
 
   /** Useful notes for driver */
-  Notes: string
+  "Delivery notes": string
 
   /** Weekly recurring notes, carried over per recipient */
   "Recipient notes": string
