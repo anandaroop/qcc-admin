@@ -68,7 +68,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
           "NameLookup",
           "Neighborhood",
           "Notes",
-          "Recurring notes",
+          "Recipient notes",
           "Dietary restrictions",
           "Language",
           "Phone",

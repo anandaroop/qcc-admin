@@ -240,7 +240,7 @@ const Recipient: React.FC<RecipientProps> = (props) => {
   const geodata = decodeGeodata(recipient.fields["Geocode cache"])
   const marker = markerMap[recipient.id]
   const hasNotes = Boolean(
-    recipient.fields["Recurring notes"] ||
+    recipient.fields["Recipient notes"] ||
       recipient.fields["Notes"] ||
       recipient.fields["Dietary restrictions"] ||
       recipient.fields["Language"]
@@ -303,8 +303,8 @@ const Recipient: React.FC<RecipientProps> = (props) => {
               {recipient.fields["Notes"] && (
                 <li className="body">{recipient.fields.Notes}</li>
               )}
-              {recipient.fields["Recurring notes"] && (
-                <li className="body">{recipient.fields["Recurring notes"]}</li>
+              {recipient.fields["Recipient notes"] && (
+                <li className="body">{recipient.fields["Recipient notes"]}</li>
               )}
               {recipient.fields["Dietary restrictions"] && (
                 <li className="body">

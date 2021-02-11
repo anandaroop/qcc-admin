@@ -30,7 +30,7 @@ export interface RecipientFields {
   Notes: string
 
   /** Weekly recurring notes, carried over per recipient */
-  "Recurring notes": string
+  "Recipient notes": string
 
   /** Dietary restrictions driver may need to know about */
   "Dietary restrictions": string
