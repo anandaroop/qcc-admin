@@ -4,6 +4,7 @@ import { DriversModel, DriverRecord } from "./store/drivers"
 import { useStoreState } from "./store"
 import Clipboard from "clipboard"
 import { useEffect } from "react"
+import { PickupLocations } from "./PickupLocations"
 
 export const MARKER_SIZE = {
   TINY: 4,
@@ -65,6 +66,7 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
 
   return (
     <div className="driver-list">
+      <PickupLocations />
       {drivers.map((driver) => {
         const recipientItinerary = itineraryMap[driver.id]
         const color = colorMap[driver.id]

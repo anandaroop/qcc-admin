@@ -1,21 +1,25 @@
-import { action, Action } from "easy-peasy";
+import { action, Action } from "easy-peasy"
 
 export interface AppModel {
   // STATE
 
-  isHelpVisible: boolean;
+  isHelpVisible: boolean
 
-  isDriverListMinimized: boolean;
+  isDriverListMinimized: boolean
+
+  currentPickupLocationIndex: number
 
   // ACTIONS
 
-  showHelp: Action<AppModel>;
+  showHelp: Action<AppModel>
 
-  hideHelp: Action<AppModel>;
+  hideHelp: Action<AppModel>
 
-  maximizeDriverList: Action<AppModel>;
+  maximizeDriverList: Action<AppModel>
 
-  minimizeDriverList: Action<AppModel>;
+  minimizeDriverList: Action<AppModel>
+
+  setPickupLocationIndex: Action<AppModel, { pickupLocationIndex: number }>
 
   // LISTENERS
 }
@@ -27,23 +31,29 @@ export const appModel: AppModel = {
 
   isDriverListMinimized: false,
 
+  currentPickupLocationIndex: 1,
+
   // ACTIONS
 
   hideHelp: action((state) => {
-    state.isHelpVisible = false;
+    state.isHelpVisible = false
   }),
 
   showHelp: action((state) => {
-    state.isHelpVisible = true;
+    state.isHelpVisible = true
   }),
 
   maximizeDriverList: action((state) => {
-    state.isDriverListMinimized = false;
+    state.isDriverListMinimized = false
   }),
 
   minimizeDriverList: action((state) => {
-    state.isDriverListMinimized = true;
+    state.isDriverListMinimized = true
+  }),
+
+  setPickupLocationIndex: action((state, payload) => {
+    state.currentPickupLocationIndex = payload.pickupLocationIndex
   }),
 
   // LISTENERS
-};
+}
