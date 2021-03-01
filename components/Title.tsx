@@ -1,6 +1,6 @@
 import React from "react"
 import Head from "next/head"
-import { Heading } from "@chakra-ui/core"
+import { Heading } from "@chakra-ui/react"
 
 interface Props {
   silent?: boolean

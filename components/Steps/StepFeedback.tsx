@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Collapse, Spinner, Text } from "@chakra-ui/core"
+import { Box, Collapse, Spinner, Text } from "@chakra-ui/react"
 
 interface StepFeedbackProps {
   /**
@@ -27,8 +27,8 @@ export const StepFeedback: React.FC<StepFeedbackProps> = ({
   isError,
   children,
 }) => (
-  <Collapse isOpen={isOpen} as="pre" overflow="hidden">
-    <Box bg={isError ? "red.100" : "gray.100"} p={4}>
+  <Collapse in={isOpen}>
+    <Box bg={isError ? "red.100" : "gray.100"} p={4} whiteSpace="pre">
       {isLoading ? <Spinner /> : <Text fontFamily="monospace">{children}</Text>}
     </Box>
   </Collapse>

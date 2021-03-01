@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from "react"
-import { Text } from "@chakra-ui/core"
+import { Text } from "@chakra-ui/react"
 
 import { Title } from "../components/Title"
 import { StepButton, StepFeedback, StepProps } from "../components/Steps"
@@ -71,7 +71,7 @@ const Step1: React.FC<StepProps<Status>> = (props) => {
   }, [status])
 
   return (
-    <>
+    <div>
       <StepButton
         isDisabled={status !== "waiting"}
         onClick={() => {
@@ -97,7 +97,7 @@ const Step1: React.FC<StepProps<Status>> = (props) => {
       >
         {feedback}
       </StepFeedback>
-    </>
+    </div>
   )
 }
 
@@ -131,7 +131,7 @@ const Step2: React.FC<StepProps<Status>> = (props) => {
   }, [status])
 
   return (
-    <>
+    <div>
       <StepButton
         isDisabled={status !== "found"}
         onClick={() => {
@@ -154,7 +154,7 @@ const Step2: React.FC<StepProps<Status>> = (props) => {
       >
         {feedback}
       </StepFeedback>
-    </>
+    </div>
   )
 }
 

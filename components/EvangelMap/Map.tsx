@@ -5,7 +5,7 @@ import { GeoJSON, Map as ReactLeafletMap, TileLayer } from "react-leaflet"
 import { CircleMarker } from "leaflet"
 import { Feature, Point } from "geojson"
 import { distance, getCoord } from "@turf/turf"
-import { Box, Divider } from "@chakra-ui/core"
+import { Box, Divider } from "@chakra-ui/react"
 
 import { useStoreState, useStoreActions } from "./store"
 import { RecipientFields } from "./store/recipients"

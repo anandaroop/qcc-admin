@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, Flex, Heading, Spinner, Text } from "@chakra-ui/core"
+import { Box, Button, Flex, Heading, Spinner, Text } from "@chakra-ui/react"
 import { signIn, useSession } from "next-auth/client"
 
 export const Authenticated: React.FC = ({ children }) => {

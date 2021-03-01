@@ -1,4 +1,4 @@
-import { Box, Heading, Link, List, ListItem, Text } from "@chakra-ui/core"
+import { Box, Heading, Link, List, ListItem, Text } from "@chakra-ui/react"
 
 import { useStoreState, useStoreActions } from "../EvangelMap/store"
 
@@ -65,7 +65,12 @@ export const Help: React.FC = () => {
                 There are basically two different ways to get this done:
               </Text>
 
-              <List as="ol" pl="1em" styleType="decimal" stylePos="outside">
+              <List
+                as="ol"
+                pl="1em"
+                styleType="decimal"
+                stylePosition="outside"
+              >
                 <ListItem d="list-item" ml={2}>
                   Keep the Airtable{" "}
                   <Text as="span" textDecoration="underline">
@@ -166,7 +171,12 @@ export const Help: React.FC = () => {
                 up for the next round of deliveries
               </Text>
 
-              <List as="ol" pl="1em" styleType="decimal" stylePos="outside">
+              <List
+                as="ol"
+                pl="1em"
+                styleType="decimal"
+                stylePosition="outside"
+              >
                 <ListItem my={3}>
                   Change filter on the view{" "}
                   <strong>

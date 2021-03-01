@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/core"
+import { Box } from "@chakra-ui/react"
 import { Navigation } from "../components/Navigation"
 
 export const Layout: React.FC = ({ children }) => {

@@ -11,7 +11,7 @@ import {
   Textarea,
   Checkbox,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { useSession } from "next-auth/client"
 import { isEqual, pick, pickBy } from "lodash"
 
