@@ -118,7 +118,7 @@ const Home: React.FC = () => {
         </CardLink>
       </Flex>
 
-      <Box mt={10} width={["95%", "95%", "91%"]}>
+      {/* <Box mt={10} width={["95%", "95%", "91%"]}>
         <SectionHeading>Calendar of public events</SectionHeading>
 
         <iframe
@@ -127,7 +127,7 @@ const Home: React.FC = () => {
           height="500px"
           scrolling="no"
         ></iframe>
-      </Box>
+      </Box> */}
     </Layout>
   )
 }
