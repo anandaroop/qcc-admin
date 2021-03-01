@@ -92,11 +92,11 @@ const IntakePage: React.FC = () => {
         <Field>
           <Label>Which of these ways are best to get in touch with you?</Label>
           <Value>
-            {
-              record.fields[
-                "Which of these ways are best to get in touch with you?"
-              ]
-            }
+            {record.fields[
+              "Which of these ways are best to get in touch with you?"
+            ].map((t) => (
+              <div>{t}</div>
+            ))}
           </Value>
         </Field>
 
