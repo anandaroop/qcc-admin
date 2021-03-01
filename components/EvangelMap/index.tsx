@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import dynamic from "next/dynamic"
-import { Box, Flex } from "@chakra-ui/core"
+import { Box, Flex } from "@chakra-ui/react"
 
 import { useStoreActions } from "./store"
 import { Help } from "./Help"

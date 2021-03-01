@@ -4,10 +4,11 @@ import {
   Box,
   Button,
   Flex,
-  Icon,
   Heading,
   useClipboard,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@chakra-ui/icons"
+
 import { Title } from "../components/Title"
 import { Layout } from "../components/Layout"
 
@@ -117,7 +118,7 @@ const Home: React.FC = () => {
         </CardLink>
       </Flex>
 
-      <Box mt={10} width={["95%", "95%", "91%"]}>
+      {/* <Box mt={10} width={["95%", "95%", "91%"]}>
         <SectionHeading>Calendar of public events</SectionHeading>
 
         <iframe
@@ -126,7 +127,7 @@ const Home: React.FC = () => {
           height="500px"
           scrolling="no"
         ></iframe>
-      </Box>
+      </Box> */}
     </Layout>
   )
 }
@@ -170,7 +171,7 @@ const CardLink: React.FC<CardLinkProps> = ({
         target={external ? "_external" : undefined}
       >
         <Heading size="lg" pb={2}>
-          {title} {external && <Icon name="external-link" mx="2px" />}
+          {title} {external && <ExternalLinkIcon mx="2px" />}
         </Heading>
       </a>
       {children}
@@ -211,19 +212,9 @@ const PinCode = () => {
       >
         {PIN_CODE}{" "}
         {hasCopied ? (
-          <Icon
-            name="check"
-            ml={2}
-            verticalAlign="text-bottom"
-            color="red.100"
-          />
+          <CheckIcon ml={2} verticalAlign="text-bottom" color="red.100" />
         ) : (
-          <Icon
-            name="copy"
-            ml={2}
-            verticalAlign="text-bottom"
-            color="red.100"
-          />
+          <CopyIcon ml={2} verticalAlign="text-bottom" color="red.100" />
         )}
       </Button>
     </>
