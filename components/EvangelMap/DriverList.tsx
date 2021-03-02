@@ -4,7 +4,7 @@ import { DriversModel, DriverRecord } from "./store/drivers"
 import { useStoreState } from "./store"
 import Clipboard from "clipboard"
 import { useEffect } from "react"
-import { PickupLocations } from "./PickupLocations"
+import { PickupLocations, PICKUP_LOCATIONS } from "./PickupLocations"
 
 export const MARKER_SIZE = {
   TINY: 4,
@@ -12,10 +12,6 @@ export const MARKER_SIZE = {
   LARGE: 12,
   HUGE: 16,
 }
-
-// const PICKUP_LOCATION = "3920 27th St, Long Island City, Queens, NY" // Evangel Church
-// const PICKUP_LOCATION = "3921 Crescent St, Long Island City, Queens, NY" // Evangel Church
-const PICKUP_LOCATION = "4909 5th St, Long Island City, Queens NY" // Connected Chef
 
 interface DriverListProps {
   driverItems: DriversModel["items"]
@@ -30,6 +26,11 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
   const isMinimized = useStoreState((state) => state.app.isDriverListMinimized)
 
   const drivers = Object.values(driverItems)
+
+  const currentPickupLocationIndex = useStoreState(
+    (state) => state.app.currentPickupLocationIndex
+  )
+  const pickupLocation = PICKUP_LOCATIONS[currentPickupLocationIndex].address
 
   useEffect(() => {
     const slack = new Clipboard("button.copy-slack", {
@@ -47,11 +48,7 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
         ).map((el: HTMLDivElement) => el.dataset.normalizedAddress)
         const driverHomeAddress = driverDiv.dataset.normalizedAddress
 
-        const route = [
-          PICKUP_LOCATION,
-          ...recipientAddresses,
-          driverHomeAddress,
-        ]
+        const route = [pickupLocation, ...recipientAddresses, driverHomeAddress]
         const text = route.join("\n")
         console.log(text)
         return text
@@ -62,7 +59,7 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
       slack.destroy()
       mapquest.destroy()
     }
-  }, [])
+  })
 
   return (
     <div className="driver-list">

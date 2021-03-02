@@ -19,7 +19,7 @@ export interface PickupLocation {
   address: string
 }
 
-const PICKUP_LOCATIONS: PickupLocation[] = [
+export const PICKUP_LOCATIONS: PickupLocation[] = [
   {
     name: "Evangel 1",
     address: "3920 27th St, Long Island City, Queens, NY",
