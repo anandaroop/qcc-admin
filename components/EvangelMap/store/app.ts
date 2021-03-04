@@ -1,4 +1,5 @@
 import { action, Action } from "easy-peasy"
+import { OptimizedRoute } from "../../../lib/optimized-route"
 import { readFromLocalStorage } from "../../../lib/localStorage"
 
 const defaultPickupLocationIndex = (readFromLocalStorage(
@@ -14,6 +15,10 @@ export interface AppModel {
 
   currentPickupLocationIndex: number
 
+  currentOptimizedRoute: OptimizedRoute
+
+  isRouteOptimizerVisible: boolean
+
   // ACTIONS
 
   showHelp: Action<AppModel>
@@ -26,6 +31,14 @@ export interface AppModel {
 
   setPickupLocationIndex: Action<AppModel, { pickupLocationIndex: number }>
 
+  setCurrentOptimizedRoute: Action<AppModel, { optimizedRoute: OptimizedRoute }>
+
+  clearCurrentOptimizedRoute: Action<AppModel>
+
+  showRouteOptimizer: Action<AppModel>
+
+  hideRouteOptimizer: Action<AppModel>
+
   // LISTENERS
 }
 
@@ -37,6 +50,10 @@ export const appModel: AppModel = {
   isDriverListMinimized: false,
 
   currentPickupLocationIndex: defaultPickupLocationIndex,
+
+  currentOptimizedRoute: null,
+
+  isRouteOptimizerVisible: false,
 
   // ACTIONS
 
@@ -58,6 +75,22 @@ export const appModel: AppModel = {
 
   setPickupLocationIndex: action((state, payload) => {
     state.currentPickupLocationIndex = payload.pickupLocationIndex
+  }),
+
+  setCurrentOptimizedRoute: action((state, payload) => {
+    state.currentOptimizedRoute = payload.optimizedRoute
+  }),
+
+  clearCurrentOptimizedRoute: action((state) => {
+    state.currentOptimizedRoute = null
+  }),
+
+  hideRouteOptimizer: action((state) => {
+    state.isRouteOptimizerVisible = false
+  }),
+
+  showRouteOptimizer: action((state) => {
+    state.isRouteOptimizerVisible = true
   }),
 
   // LISTENERS

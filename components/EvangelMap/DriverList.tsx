@@ -1,10 +1,11 @@
 import { decodeGeodata } from "airtable-geojson"
 import { RecipientsModel, RecipientRecord } from "./store/recipients"
 import { DriversModel, DriverRecord } from "./store/drivers"
-import { useStoreState } from "./store"
+import { useStoreState, useStoreActions } from "./store"
 import Clipboard from "clipboard"
 import { useEffect } from "react"
 import { PickupLocations, PICKUP_LOCATIONS } from "./PickupLocations"
+import { OptimizedRoute } from "../../lib/optimized-route"
 
 export const MARKER_SIZE = {
   TINY: 4,
@@ -135,13 +136,34 @@ const Driver: React.FC<DriverProps> = (props) => {
     []
   )
 
+  // get route optimizing data from global state
+  const { currentPickupLocationIndex } = useStoreState((state) => state.app)
+  const { setCurrentOptimizedRoute, showRouteOptimizer } = useStoreActions(
+    (actions) => actions.app
+  )
+  const pickupLocation = PICKUP_LOCATIONS[currentPickupLocationIndex].address
+
   try {
     const geodata = decodeGeodata(driver.fields["Geocode cache"])
     return (
       <div className="copy-buttons-and-driver">
         <div className="copy-buttons">
           <button className="copy-slack">Slack</button>
-          <button className="copy-mapquest">Mapquest</button>
+          <button
+            className="copy-mapquest"
+            onClick={async () => {
+              showRouteOptimizer()
+              const recipients = itineraryMap[driver.id]
+              const route = await OptimizedRoute.create(
+                pickupLocation,
+                recipients,
+                driver
+              )
+              setCurrentOptimizedRoute({ optimizedRoute: route })
+            }}
+          >
+            Mapquest
+          </button>
         </div>
 
         <div
