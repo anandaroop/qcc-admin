@@ -1,4 +1,9 @@
 import { action, Action } from "easy-peasy"
+import { readFromLocalStorage } from "../../../lib/localStorage"
+
+const defaultPickupLocationIndex = (readFromLocalStorage(
+  "pickupLocationIndex"
+) || 0) as number
 
 export interface AppModel {
   // STATE
@@ -31,7 +36,7 @@ export const appModel: AppModel = {
 
   isDriverListMinimized: false,
 
-  currentPickupLocationIndex: 1,
+  currentPickupLocationIndex: defaultPickupLocationIndex,
 
   // ACTIONS
 

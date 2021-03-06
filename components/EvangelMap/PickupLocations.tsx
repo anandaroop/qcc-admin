@@ -1,4 +1,5 @@
 import { useStoreState, useStoreActions } from "./store"
+import { writeToLocalStorage } from "../../lib/localStorage"
 import {
   Box,
   Button,
@@ -73,6 +74,7 @@ const PickupLocationModal = ({ isOpen, onClose }) => {
             e.preventDefault()
             const form = e.target as HTMLFormElement
             const value = form.elements["pickupLocation"].value
+            writeToLocalStorage("pickupLocationIndex", parseInt(value))
             setPickupLocationIndex({ pickupLocationIndex: parseInt(value) })
             onClose()
           }}
