@@ -73,6 +73,11 @@ export const RouteOptimizer: React.FC = () => {
               })}
 
               <Text color="gray.400">Ending at {endAt || "?"}</Text>
+              <Text mt={2} color="gray.500" fontSize={12}>
+                After pickup, estimated:{" "}
+                {currentOptimizedRoute.stats.distance.toFixed()} mi /{" "}
+                {currentOptimizedRoute.stats.formattedTime}
+              </Text>
             </OrderedList>
 
             <Text my={4}>

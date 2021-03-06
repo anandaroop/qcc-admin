@@ -11,7 +11,7 @@ export class OptimizedRoute {
   public pickupAddress: string
   private recipients: RecipientRecord[]
   public driver: DriverRecord
-  private response: MapquetApiResponse
+  private response: MapquestApiResponse
 
   /**
    * Factory method that encapsulates the creation of a Mapquest optimized
@@ -33,6 +33,14 @@ export class OptimizedRoute {
       .slice(1, -1) // i.e. the middle bit, without initial pickup and driver's final home stop
       .map((i) => i - 1) // decremented to the correct range
     return recipientSequence.map((idx) => this.recipients[idx])
+  }
+
+  public get stats(): Pick<Route, "distance" | "formattedTime"> {
+    const {
+      route: { distance, formattedTime },
+    } = this.response
+
+    return { distance, formattedTime }
   }
 
   /** Private constructor method, used only by the `create` factory method */
@@ -79,7 +87,7 @@ export class OptimizedRoute {
       }
 
       const response: Response = await fetch(url, options)
-      const json: MapquetApiResponse = await response.json()
+      const json: MapquestApiResponse = await response.json()
       this.response = json
     } catch (error) {
       console.error({ error })
@@ -88,15 +96,16 @@ export class OptimizedRoute {
   }
 }
 
-interface MapquetApiResponse {
-  route: {
-    distance: number
-    formattedTime: string
-    fuelUsed: number
-    locations: Location[]
-    locationSequence: number[]
-    routeError: unknown
-  }
+interface Route {
+  distance: number
+  formattedTime: string
+  fuelUsed: number
+  locations: Location[]
+  locationSequence: number[]
+  routeError: unknown
+}
+interface MapquestApiResponse {
+  route: Route
 }
 
 interface Location {
