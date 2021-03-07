@@ -73,7 +73,7 @@ export class OptimizedRoute {
   private fetch = async (): Promise<void> => {
     try {
       console.log("Sending", this.allAddresses)
-      const url = `http://www.mapquestapi.com/directions/v2/optimizedroute?key=${process.env.NEXT_PUBLIC_MAPQUEST_API_KEY}`
+      const url = `https://www.mapquestapi.com/directions/v2/optimizedroute?key=${process.env.NEXT_PUBLIC_MAPQUEST_API_KEY}`
       const options = {
         method: "POST",
         mode: "cors" as RequestMode, // no-cors, *cors, same-origin
