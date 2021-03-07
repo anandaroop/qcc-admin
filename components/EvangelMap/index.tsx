@@ -8,6 +8,7 @@ import { InfoSidebar } from "./InfoSidebar"
 import { API } from "../../lib/api"
 import { DriverFields } from "./store/drivers"
 import { RecipientFields } from "./store/recipients"
+import { RouteOptimizer } from "./RouteOptimizer"
 
 const MapWithNoSSR = dynamic(() => import("./Map"), { ssr: false })
 
@@ -83,8 +84,9 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
 
   return (
     <>
+      <RouteOptimizer />
       <Flex direction="row">
-        <Box flex="3">
+        <Box flex="3" className="big-map-container">
           <MapWithNoSSR />
         </Box>
         <Box flex="1" height="calc(100vh - 5rem)" minW="25em" overflow="scroll">

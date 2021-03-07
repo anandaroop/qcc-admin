@@ -26,9 +26,7 @@ export const Help: React.FC = () => {
               <Heading as="h2" fontSize="24px">
                 Airtable Route Planner
               </Heading>
-
               <Text my={3}>Check out the notes below.</Text>
-
               <Text my={3}>
                 If you still have questions drop em in the the{" "}
                 {/* TODO: figure out how to color hyperlinks?! */}
@@ -39,16 +37,13 @@ export const Help: React.FC = () => {
                 </Text>{" "}
                 channel
               </Text>
-
               <Heading as="h3" mt={4} fontSize="18px">
                 What this is
               </Heading>
-
               <Text my={3}>
                 This map app provides a friendlier view into the Airtable tables
                 we use to manage deliveries.
               </Text>
-
               <Text my={3}>
                 All <em>updates</em> to driving assignments are still made in
                 the Airtable interface, but this map interface should make it
@@ -56,15 +51,12 @@ export const Help: React.FC = () => {
                 where they are coming from, which stops are assigned to them,
                 which stops still need to be assigned, and so on.
               </Text>
-
               <Heading as="h3" mt={4} fontSize="18px">
                 How to use this
               </Heading>
-
               <Text my={3}>
                 There are basically two different ways to get this done:
               </Text>
-
               <List
                 as="ol"
                 pl="1em"
@@ -133,8 +125,28 @@ export const Help: React.FC = () => {
 
               <Text my={3}>
                 Once all assignments are done, use the{" "}
-                <LilButton>Mapquest</LilButton> button to copy a driver
-                itinerary into{" "}
+                <LilButton>Mapquest</LilButton> button to see an optimized route
+                according to Mapquest. If the route information and preview map
+                look reasonable, go to Airtable and populate the "Suggested
+                order" column in the Delivery Recipients table to indicate the
+                optimized itinerary.
+              </Text>
+
+              <Text my={3}>
+                If the route looks funky you may need to optimize the route the
+                old-fashioned way:
+              </Text>
+
+              <Text
+                my={3}
+                fontSize={14}
+                pl={3}
+                lineHeight={1.5}
+                borderLeft="solid 1px gray"
+              >
+                Pressing the <LilButton>Mapquest</LilButton> button also copies
+                that driver's itinerary to your clipboard, so you can copy a
+                driver itinerary into{" "}
                 <Text as="span" textDecoration="underline">
                   <Link
                     target="mapquest"
@@ -194,6 +206,7 @@ export const Help: React.FC = () => {
                   to match the name of the upcoming delivery, e.g. `Evangel -
                   2020-07-07`
                 </ListItem>
+
                 <ListItem my={3}>
                   Double check that the Map App in{" "}
                   <strong>

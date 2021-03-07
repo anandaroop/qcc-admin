@@ -5,7 +5,7 @@ import { GeoJSON, Map as ReactLeafletMap, TileLayer } from "react-leaflet"
 import { CircleMarker } from "leaflet"
 import { Feature, Point } from "geojson"
 import { distance, getCoord } from "@turf/turf"
-import { Box, Divider } from "@chakra-ui/react"
+import { Box, Text } from "@chakra-ui/react"
 
 import { useStoreState, useStoreActions } from "./store"
 import { RecipientFields } from "./store/recipients"
@@ -119,7 +119,7 @@ const Map: React.FC = () => {
 
       <style jsx global>
         {`
-          .leaflet-container {
+          .big-map-container > .leaflet-container {
             width: 100%;
             height: calc(100vh - 5rem);
           }
@@ -159,9 +159,8 @@ const PopupContent: React.FC<{
         feature={feature}
         drivers={drivers}
       ></AirtableRecordLink>
-      <Divider my={2} borderColor="#999" />
-      Other stops at or near this address:
-      <Box>
+      <Box borderTop="solid 1px #999" mt={8} pt={8}>
+        <Text as="div">Other stops at or near this address:</Text>
         {neighbors.map((n) => (
           <Box my={1} key={n.id}>
             <AirtableRecordLink
