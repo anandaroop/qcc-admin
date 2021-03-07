@@ -11,12 +11,15 @@ import {
 import { decodeGeodata } from "airtable-geojson"
 import * as L from "leaflet"
 import { OptimizedRoute } from "../../lib/optimized-route"
+import { useBlurredPII } from "../../lib/use-blurred-pii"
 
 interface Props {
   currentOptimizedRoute: OptimizedRoute
 }
 
 const RoutingResult: React.FC<Props> = ({ currentOptimizedRoute }) => {
+  const { withBlurredPII } = useBlurredPII()
+
   let startAt: string, endAt: string
 
   if (currentOptimizedRoute) {
@@ -86,13 +89,22 @@ const RoutingResult: React.FC<Props> = ({ currentOptimizedRoute }) => {
 
               return (
                 <ListItem key={r.id} my={1}>
-                  <Text fontWeight="bold">{r.fields.NameLookup}</Text>
-                  <Text color="gray.600">{recipientAddress}</Text>
+                  <Text fontWeight="bold" style={withBlurredPII()}>
+                    {r.fields.NameLookup}
+                  </Text>
+                  <Text color="gray.600" style={withBlurredPII()}>
+                    {recipientAddress}
+                  </Text>
                 </ListItem>
               )
             })}
 
-            <Text color="gray.400">Ending at {endAt || "?"}</Text>
+            <Text color="gray.400">
+              Ending at{" "}
+              <span style={withBlurredPII({ color: "#A0AEC0" })}>
+                {endAt || "?"}
+              </span>
+            </Text>
             <Text mt={2} color="gray.500" fontSize={12}>
               After pickup, estimated distance/time:{" "}
               {currentOptimizedRoute.stats.distance.toFixed()} mi /{" "}
