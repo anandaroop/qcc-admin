@@ -86,7 +86,7 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
     <>
       <RouteOptimizer />
       <Flex direction="row">
-        <Box flex="3">
+        <Box flex="3" className="big-map-container">
           <MapWithNoSSR />
         </Box>
         <Box flex="1" height="calc(100vh - 5rem)" minW="25em" overflow="scroll">

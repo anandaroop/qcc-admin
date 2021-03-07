@@ -119,7 +119,7 @@ const Map: React.FC = () => {
 
       <style jsx global>
         {`
-          .leaflet-container {
+          .big-map-container > .leaflet-container {
             width: 100%;
             height: calc(100vh - 5rem);
           }
