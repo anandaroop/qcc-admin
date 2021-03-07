@@ -183,7 +183,7 @@ const Driver: React.FC<DriverProps> = (props) => {
         >
           <div className="driverName">
             <span>
-              <span style={withBlurredPII({ color: "white", blurAmount: 5 })}>
+              <span style={withBlurredPII({ color: "white" })}>
                 {driver.fields.Name}
               </span>{" "}
               ({recipientIds?.length || 0})
