@@ -9,6 +9,7 @@ import { API } from "../../lib/api"
 import { DriverFields } from "./store/drivers"
 import { RecipientFields } from "./store/recipients"
 import { RouteOptimizer } from "./RouteOptimizer"
+import { BlurredPIIProvider } from "../../lib/use-blurred-pii"
 
 const MapWithNoSSR = dynamic(() => import("./Map"), { ssr: false })
 
@@ -83,7 +84,8 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
   }, [])
 
   return (
-    <>
+    // optionally blur PII before taking screencaps
+    <BlurredPIIProvider shouldBlur={false}>
       <RouteOptimizer />
       <Flex direction="row">
         <Box flex="3" className="big-map-container">
@@ -94,32 +96,9 @@ export const EvangelMap: React.FC<EvangelMapProps> = ({
         </Box>
         <Help />
       </Flex>
-
       <style jsx global>
-        {`
-           {
-            /* * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-
-          h1,
-          h2,
-          h3,
-          p,
-          li {
-            padding-top: 0.5em;
-            padding-bottom: 0.5em;
-          }
-
-          ol,
-          ul {
-            padding-left: 1.5em;
-          } */
-          }
-        `}
+        {``}
       </style>
-    </>
+    </BlurredPIIProvider>
   )
 }

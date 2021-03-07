@@ -14,6 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { OptimizedRoute } from "../../lib/optimized-route"
+import { useBlurredPII } from "../../lib/use-blurred-pii"
 
 // dynamic import to avoid ssr leaflet error
 const RoutingResult = dynamic(() => import("./RoutingResult"), { ssr: false })
@@ -26,6 +27,8 @@ export const RouteOptimizer: React.FC = () => {
     (actions) => actions.app
   )
 
+  const { withBlurredPII } = useBlurredPII()
+
   const teardown = () => {
     hideRouteOptimizer()
     clearCurrentOptimizedRoute()
@@ -36,9 +39,16 @@ export const RouteOptimizer: React.FC = () => {
       <ModalOverlay />
       <ModalContent minWidth={"60em"}>
         <ModalHeader>
-          {currentOptimizedRoute
-            ? `Optimized route for ${currentOptimizedRoute?.driver?.fields?.Name}`
-            : "Loading…"}
+          {currentOptimizedRoute ? (
+            <span>
+              Optimized route for
+              <span style={withBlurredPII({ blurAmount: 12 })}>
+                {currentOptimizedRoute?.driver?.fields?.Name}
+              </span>
+            </span>
+          ) : (
+            "Loading…"
+          )}
         </ModalHeader>
         <ModalCloseButton />
         {currentOptimizedRoute ? (

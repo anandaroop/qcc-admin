@@ -6,6 +6,7 @@ import Clipboard from "clipboard"
 import { useEffect } from "react"
 import { PickupLocations, PICKUP_LOCATIONS } from "./PickupLocations"
 import { OptimizedRoute } from "../../lib/optimized-route"
+import { useBlurredPII } from "../../lib/use-blurred-pii"
 
 export const MARKER_SIZE = {
   TINY: 4,
@@ -119,6 +120,7 @@ interface DriverProps {
 
 const Driver: React.FC<DriverProps> = (props) => {
   const { driver, children, markerMap, itineraryMap, color } = props
+  const { withBlurredPII } = useBlurredPII()
 
   const recipientIds = itineraryMap[driver.id]?.map((r) => r.id)
   const theseMarkers = Object.entries(markerMap).reduce(
@@ -181,7 +183,10 @@ const Driver: React.FC<DriverProps> = (props) => {
         >
           <div className="driverName">
             <span>
-              {driver.fields.Name} ({recipientIds?.length || 0})
+              <span style={withBlurredPII({ color: "white", blurAmount: 5 })}>
+                {driver.fields.Name}
+              </span>{" "}
+              ({recipientIds?.length || 0})
             </span>
           </div>
           <div className="recipientList">{children}</div>
@@ -256,6 +261,7 @@ interface RecipientProps {
 const Recipient: React.FC<RecipientProps> = (props) => {
   const defaults = { visible: true }
   const { recipient, color, markerMap, visible } = { ...defaults, ...props }
+  const { withBlurredPII: withBlurredPII } = useBlurredPII()
 
   const tblId = useStoreState((state) => state.recipients.metadata["Table ID"])
   const viwId = useStoreState((state) => state.recipients.metadata["View ID"])
@@ -298,13 +304,16 @@ const Recipient: React.FC<RecipientProps> = (props) => {
             )
           }}
         >
-          {recipient.fields.NameLookup?.[0]}
+          <span style={withBlurredPII({ color })}>
+            {recipient.fields.NameLookup?.[0]}
+          </span>
         </a>
         {recipient.fields["Confirmed?"] ? " ✓" : ""}
       </div>
       <div>
         <div
           className="address"
+          style={withBlurredPII()}
           data-normalized-address={geodata.o.formattedAddress}
         >
           <a
@@ -317,27 +326,33 @@ const Recipient: React.FC<RecipientProps> = (props) => {
           </a>
         </div>
 
-        <div className="phone">{recipient.fields.Phone?.[0]}</div>
+        <div className="phone" style={withBlurredPII()}>
+          {recipient.fields.Phone?.[0]}
+        </div>
 
         {hasNotes && (
           <>
             <ul className="notes">
               <div className="header">NOTES</div>
               {recipient.fields["Delivery notes"] && (
-                <li className="body">{recipient.fields["Delivery notes"]}</li>
+                <li className="body" style={withBlurredPII()}>
+                  {recipient.fields["Delivery notes"]}
+                </li>
               )}
               {recipient.fields["Recipient notes"] && (
-                <li className="body">{recipient.fields["Recipient notes"]}</li>
+                <li className="body" style={withBlurredPII()}>
+                  {recipient.fields["Recipient notes"]}
+                </li>
               )}
               {recipient.fields["Dietary restrictions"] && (
-                <li className="body">
+                <li className="body" style={withBlurredPII()}>
                   Dietary restrictions:{" "}
                   <strong>{recipient.fields["Dietary restrictions"]}</strong>
                 </li>
               )}
               {recipient.fields["Language"] &&
                 recipient.fields["Language"] != "English" && (
-                  <li className="body">
+                  <li className="body" style={withBlurredPII()}>
                     Preferred language:{" "}
                     <strong>{recipient.fields["Language"]}</strong>
                   </li>
@@ -363,7 +378,6 @@ const Recipient: React.FC<RecipientProps> = (props) => {
 
         .address a {
           font-weight: 500;
-          color: blue;
         }
 
         .phone {
