@@ -3,6 +3,7 @@ import { writeToLocalStorage } from "../../lib/localStorage"
 import {
   Box,
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,12 +23,9 @@ export interface PickupLocation {
 
 export const PICKUP_LOCATIONS: PickupLocation[] = [
   {
-    name: "Evangel 1",
-    address: "3920 27th St, Long Island City, Queens, NY",
-  },
-  {
-    name: "Evangel 2",
-    address: "3921 Crescent St, Long Island City, Queens, NY",
+    name: "Evangel",
+    address: "3921 Crescent St, Long Island City, Queens, NY", // <- car entrance
+    // address: "3920 27th St, Long Island City, Queens, NY", // <- car exit
   },
   {
     name: "Connected Chef",
@@ -90,13 +88,20 @@ const PickupLocationModal = ({ isOpen, onClose }) => {
               {PICKUP_LOCATIONS.map((loc, i) => {
                 return (
                   <label key={i}>
-                    <input
-                      type="radio"
-                      name="pickupLocation"
-                      value={i}
-                      defaultChecked={i === currentPickupLocationIndex}
-                    />{" "}
-                    {loc.address}
+                    <Flex>
+                      <Box mr={2}>
+                        <input
+                          type="radio"
+                          name="pickupLocation"
+                          value={i}
+                          defaultChecked={i === currentPickupLocationIndex}
+                        />{" "}
+                      </Box>
+                      <Box>
+                        <Text fontWeight="bold">{loc.name}</Text>
+                        <Text>{loc.address}</Text>
+                      </Box>
+                    </Flex>
                   </label>
                 )
               })}
@@ -109,7 +114,7 @@ const PickupLocationModal = ({ isOpen, onClose }) => {
 
             <Text my={4} color="gray.500">
               If you don't see the right pickup location listed here drop a note
-              in the #data channel to get it added.
+              in the data channel on Slack to get it added.
             </Text>
           </ModalBody>
 
