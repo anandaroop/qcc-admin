@@ -1,4 +1,4 @@
-import { CSSProperties, createContext, useContext } from "react"
+import { CSSProperties, createContext, createElement, useContext } from "react"
 
 const defaultShouldBlur = false
 const BlurredPIIContext = createContext(defaultShouldBlur)
@@ -37,6 +37,21 @@ const withBlurredPII = (options?: BlurredPIIOptions): CSSProperties => {
       textShadow: `0 0 ${blurAmount ?? 8}px ${color ?? "black"}`,
     }
   }
+}
+
+export const PII: React.FC<BlurredPIIOptions & { as?: React.ElementType }> = (
+  props
+) => {
+  const { color, blurAmount, additionalCSS, children } = props
+  const htmlElement = props.as ?? "span"
+
+  return createElement(
+    htmlElement,
+    {
+      style: withBlurredPII({ color, blurAmount, additionalCSS }),
+    },
+    children
+  )
 }
 
 interface BlurredPII {
