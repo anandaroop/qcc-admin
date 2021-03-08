@@ -28,6 +28,7 @@ export const RouteOptimizer: React.FC = () => {
   )
 
   const { withBlurredPII } = useBlurredPII()
+  const nameStyle = withBlurredPII({ blurAmount: 12 })
 
   const teardown = () => {
     hideRouteOptimizer()
@@ -42,7 +43,7 @@ export const RouteOptimizer: React.FC = () => {
           {currentOptimizedRoute ? (
             <span>
               Optimized route for
-              <span style={withBlurredPII({ blurAmount: 12 })}>
+              <span style={nameStyle}>
                 {currentOptimizedRoute?.driver?.fields?.Name}
               </span>
             </span>
