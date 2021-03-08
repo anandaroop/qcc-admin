@@ -11,7 +11,7 @@ import {
 import { decodeGeodata } from "airtable-geojson"
 import * as L from "leaflet"
 import { OptimizedRoute } from "../../lib/optimized-route"
-import { useBlurredPII } from "../../lib/use-blurred-pii"
+import { useBlurredPII } from "../../lib/blurred-pii"
 
 interface Props {
   currentOptimizedRoute: OptimizedRoute

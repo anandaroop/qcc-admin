@@ -9,7 +9,7 @@ import { API } from "../../lib/api"
 import { DriverFields } from "./store/drivers"
 import { RecipientFields } from "./store/recipients"
 import { RouteOptimizer } from "./RouteOptimizer"
-import { BlurredPIIProvider } from "../../lib/use-blurred-pii"
+import { BlurredPIIProvider } from "../../lib/blurred-pii"
 
 const MapWithNoSSR = dynamic(() => import("./Map"), { ssr: false })
 

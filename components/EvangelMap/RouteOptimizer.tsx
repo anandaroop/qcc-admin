@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { OptimizedRoute } from "../../lib/optimized-route"
-import { useBlurredPII } from "../../lib/use-blurred-pii"
+import { useBlurredPII } from "../../lib/blurred-pii"
 
 // dynamic import to avoid ssr leaflet error
 const RoutingResult = dynamic(() => import("./RoutingResult"), { ssr: false })
