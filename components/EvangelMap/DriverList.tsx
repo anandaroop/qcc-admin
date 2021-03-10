@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { PickupLocations, PICKUP_LOCATIONS } from "./PickupLocations"
 import { OptimizedRoute } from "../../lib/optimized-route"
 import { useBlurredPII } from "../../lib/blurred-pii"
+import { Text } from "@chakra-ui/react"
 
 export const MARKER_SIZE = {
   TINY: 4,
@@ -266,146 +267,158 @@ const Recipient: React.FC<RecipientProps> = (props) => {
   const tblId = useStoreState((state) => state.recipients.metadata["Table ID"])
   const viwId = useStoreState((state) => state.recipients.metadata["View ID"])
 
-  const geodata = decodeGeodata(recipient.fields["Geocode cache"])
-  const marker = markerMap[recipient.id]
-  const hasNotes = Boolean(
-    recipient.fields["Recipient notes"] ||
-      recipient.fields["Delivery notes"] ||
-      recipient.fields["Dietary restrictions"] ||
-      recipient.fields["Language"]
-  )
+  try {
+    const geodata = decodeGeodata(recipient.fields["Geocode cache"])
 
-  const style = {
-    display: visible ? "block" : "none",
-  }
+    const marker = markerMap[recipient.id]
+    const hasNotes = Boolean(
+      recipient.fields["Recipient notes"] ||
+        recipient.fields["Delivery notes"] ||
+        recipient.fields["Dietary restrictions"] ||
+        recipient.fields["Language"]
+    )
 
-  return (
-    <div
-      style={style}
-      className="recipient"
-      key={recipient.id}
-      onMouseEnter={() => {
-        marker.setRadius(MARKER_SIZE.HUGE)
-      }}
-      onMouseLeave={() => {
-        marker.setRadius(MARKER_SIZE.LARGE)
-      }}
-    >
-      <br />
-      <div className="recipientName">
-        <a
-          target="airtable"
-          // href={`https://airtable.com/${tblId}/${viwId}/${recipient.id}`}
-          style={{ color, cursor: "pointer" }}
-          onClick={() => {
-            window.open(
-              `https://airtable.com/${tblId}/${viwId}/${recipient.id}`,
-              "airtable"
-            )
-          }}
-        >
-          <span style={withBlurredPII({ color })}>
-            {recipient.fields.NameLookup?.[0]}
-          </span>
-        </a>
-        {recipient.fields["Confirmed?"] ? " ✓" : ""}
-      </div>
-      <div>
-        <div
-          className="address"
-          style={withBlurredPII()}
-          data-normalized-address={geodata.o.formattedAddress}
-        >
+    const style = {
+      display: visible ? "block" : "none",
+    }
+
+    return (
+      <div
+        style={style}
+        className="recipient"
+        key={recipient.id}
+        onMouseEnter={() => {
+          marker.setRadius(MARKER_SIZE.HUGE)
+        }}
+        onMouseLeave={() => {
+          marker.setRadius(MARKER_SIZE.LARGE)
+        }}
+      >
+        <br />
+        <div className="recipientName">
           <a
-            target="gmap"
-            href={encodeURI(
-              `https://www.google.com/maps/dir/${geodata.o.formattedAddress}`
-            )}
+            target="airtable"
+            // href={`https://airtable.com/${tblId}/${viwId}/${recipient.id}`}
+            style={{ color, cursor: "pointer" }}
+            onClick={() => {
+              window.open(
+                `https://airtable.com/${tblId}/${viwId}/${recipient.id}`,
+                "airtable"
+              )
+            }}
           >
-            {recipient.fields["Address (computed)"]}
+            <span style={withBlurredPII({ color })}>
+              {recipient.fields.NameLookup?.[0]}
+            </span>
           </a>
+          {recipient.fields["Confirmed?"] ? " ✓" : ""}
         </div>
+        <div>
+          <div
+            className="address"
+            style={withBlurredPII()}
+            data-normalized-address={geodata.o.formattedAddress}
+          >
+            <a
+              target="gmap"
+              href={encodeURI(
+                `https://www.google.com/maps/dir/${geodata.o.formattedAddress}`
+              )}
+            >
+              {recipient.fields["Address (computed)"]}
+            </a>
+          </div>
 
-        <div className="phone" style={withBlurredPII()}>
-          {recipient.fields.Phone?.[0]}
-        </div>
+          <div className="phone" style={withBlurredPII()}>
+            {recipient.fields.Phone?.[0]}
+          </div>
 
-        {hasNotes && (
-          <>
-            <ul className="notes">
-              <div className="header">NOTES</div>
-              {recipient.fields["Delivery notes"] && (
-                <li className="body" style={withBlurredPII()}>
-                  {recipient.fields["Delivery notes"]}
-                </li>
-              )}
-              {recipient.fields["Recipient notes"] && (
-                <li className="body" style={withBlurredPII()}>
-                  {recipient.fields["Recipient notes"]}
-                </li>
-              )}
-              {recipient.fields["Dietary restrictions"] && (
-                <li className="body" style={withBlurredPII()}>
-                  Dietary restrictions:{" "}
-                  <strong>{recipient.fields["Dietary restrictions"]}</strong>
-                </li>
-              )}
-              {recipient.fields["Language"] &&
-                recipient.fields["Language"] != "English" && (
+          {hasNotes && (
+            <>
+              <ul className="notes">
+                <div className="header">NOTES</div>
+                {recipient.fields["Delivery notes"] && (
                   <li className="body" style={withBlurredPII()}>
-                    Preferred language:{" "}
-                    <strong>{recipient.fields["Language"]}</strong>
+                    {recipient.fields["Delivery notes"]}
                   </li>
                 )}
-            </ul>
-          </>
-        )}
+                {recipient.fields["Recipient notes"] && (
+                  <li className="body" style={withBlurredPII()}>
+                    {recipient.fields["Recipient notes"]}
+                  </li>
+                )}
+                {recipient.fields["Dietary restrictions"] && (
+                  <li className="body" style={withBlurredPII()}>
+                    Dietary restrictions:{" "}
+                    <strong>{recipient.fields["Dietary restrictions"]}</strong>
+                  </li>
+                )}
+                {recipient.fields["Language"] &&
+                  recipient.fields["Language"] != "English" && (
+                    <li className="body" style={withBlurredPII()}>
+                      Preferred language:{" "}
+                      <strong>{recipient.fields["Language"]}</strong>
+                    </li>
+                  )}
+              </ul>
+            </>
+          )}
+        </div>
+
+        <style jsx>{`
+          .recipient {
+            padding: 0 1em;
+          }
+
+          .recipientName {
+            font-weight: bold;
+            font-size: 1em;
+          }
+
+          .address {
+            padding: 0.125em 0;
+          }
+
+          .address a {
+            font-weight: 500;
+          }
+
+          .phone {
+            padding: 0.125em 0;
+          }
+
+          ul.notes {
+            padding: 0 0 0 1em;
+            border-left: solid 2px #ddd;
+          }
+
+          .notes .header {
+            font-weight: bold;
+            font-size: 80%;
+            color: #999;
+            margin: 0.25em 0;
+          }
+
+          ul.notes li.body {
+            font-style: italic;
+            color: #666;
+            margin-left: 1em;
+          }
+
+          a:hover {
+            background: ${color}33;
+          }
+        `}</style>
       </div>
-
-      <style jsx>{`
-        .recipient {
-          padding: 0 1em;
-        }
-
-        .recipientName {
-          font-weight: bold;
-          font-size: 1em;
-        }
-
-        .address {
-          padding: 0.125em 0;
-        }
-
-        .address a {
-          font-weight: 500;
-        }
-
-        .phone {
-          padding: 0.125em 0;
-        }
-
-        ul.notes {
-          padding: 0 0 0 1em;
-          border-left: solid 2px #ddd;
-        }
-
-        .notes .header {
-          font-weight: bold;
-          font-size: 80%;
-          color: #999;
-          margin: 0.25em 0;
-        }
-
-        ul.notes li.body {
-          font-style: italic;
-          color: #666;
-          margin-left: 1em;
-        }
-
-        a:hover {
-          background: ${color}33;
-        }
-      `}</style>
-    </div>
-  )
+    )
+  } catch (error) {
+    return (
+      <div className="recipient">
+        <Text mx={4} bg="yellow.200">
+          ⚠️ A recipient ({recipient.fields.NameLookup?.[0]}) was assigned to
+          this driver but wasn't properly geocoded.
+        </Text>
+      </div>
+    )
+  }
 }
