@@ -6,7 +6,7 @@ import Clipboard from "clipboard"
 import { useEffect } from "react"
 import { PickupLocations, PICKUP_LOCATIONS } from "./PickupLocations"
 import { OptimizedRoute } from "../../lib/optimized-route"
-import { useBlurredPII } from "../../lib/use-blurred-pii"
+import { useBlurredPII } from "../../lib/blurred-pii"
 
 export const MARKER_SIZE = {
   TINY: 4,
