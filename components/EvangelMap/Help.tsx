@@ -125,11 +125,10 @@ export const Help: React.FC = () => {
 
               <Text my={3}>
                 Once all assignments are done, use the{" "}
-                <LilButton>Mapquest</LilButton> button to see an optimized route
-                according to Mapquest. If the route information and preview map
-                look reasonable, go to Airtable and populate the "Suggested
-                order" column in the Delivery Recipients table to indicate the
-                optimized itinerary.
+                <LilButton>Mapquest</LilButton> buttons to see an optimized
+                route for each driver, according to Mapquest. If the route
+                information and preview map look reasonable, go ahead and allow
+                the tool to update Airtable with the optimized itinerary.
               </Text>
 
               <Text my={3}>
