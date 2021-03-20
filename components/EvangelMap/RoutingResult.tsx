@@ -131,9 +131,9 @@ const RoutingResult: React.FC<Props> = ({ currentOptimizedRoute }) => {
       </UnorderedList>
 
       <Text my={4}>
-        If this route looks reasonable, go ahead and enter this order into
-        Airtable. Then reload the route planning app to see the order reflected
-        on the big map, and verify that it makes sense.
+        If this route looks reasonable, you can automically update Airtable from
+        here. Then reload the route planning app to see the order reflected on
+        the big map, and verify that it makes sense.
       </Text>
 
       <style jsx global>{`

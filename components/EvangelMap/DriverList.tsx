@@ -308,6 +308,11 @@ const Recipient: React.FC<RecipientProps> = (props) => {
             }}
           >
             <span style={withBlurredPII({ color })}>
+              {recipient.fields["Suggested order"] && (
+                <Text as="span" opacity={0.5}>
+                  {recipient.fields["Suggested order"]}.&nbsp;
+                </Text>
+              )}
               {recipient.fields.NameLookup?.[0]}
             </span>
           </a>
