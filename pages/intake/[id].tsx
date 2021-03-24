@@ -166,6 +166,7 @@ const IntakePage: React.FC = () => {
               my={3}
               maxW="40em"
               placeholder="Add more intake notes"
+              display="block"
             ></Textarea>
           </Value>
         </Field>
