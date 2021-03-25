@@ -94,8 +94,8 @@ const IntakePage: React.FC = () => {
           <Value>
             {record.fields[
               "Which of these ways are best to get in touch with you?"
-            ].map((t) => (
-              <div>{t}</div>
+            ]?.map((t) => (
+              <div key={t}>{t}</div>
             ))}
           </Value>
         </Field>
