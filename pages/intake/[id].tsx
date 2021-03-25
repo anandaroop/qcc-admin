@@ -134,7 +134,7 @@ const IntakePage: React.FC = () => {
           <Value>
             <Checkbox
               ref={groceryNeedsRef}
-              defaultIsChecked={record.fields["Has grocery needs"]}
+              defaultChecked={record.fields["Has grocery needs"]}
             />
           </Value>
         </Field>
@@ -144,7 +144,7 @@ const IntakePage: React.FC = () => {
           <Value>
             <Checkbox
               ref={immediateFoodNeedsRef}
-              defaultIsChecked={record.fields["Needs immediate food delivery"]}
+              defaultChecked={record.fields["Needs immediate food delivery"]}
             />
           </Value>
         </Field>
@@ -153,7 +153,7 @@ const IntakePage: React.FC = () => {
           <Label>9MR Waitlist</Label>
           <Checkbox
             ref={waitlist9mrRef}
-            defaultIsChecked={record.fields["9MR wait list"]}
+            defaultChecked={record.fields["9MR wait list"]}
           />
         </Field>
 
