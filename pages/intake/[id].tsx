@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { useRouter } from "next/router"
 import {
   Box,
@@ -11,6 +11,9 @@ import {
   Textarea,
   Checkbox,
   useToast,
+  RadioGroup,
+  Stack,
+  Radio,
 } from "@chakra-ui/react"
 import { useSession } from "next-auth/client"
 import { isEqual, pick, pickBy } from "lodash"
@@ -18,7 +21,7 @@ import { isEqual, pick, pickBy } from "lodash"
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
 import { useAirtableRecord, useAirtableRecordUpdate } from "../../lib/hooks"
-import { RequesterFields } from "../../schemas/requester"
+import { RequesterFields, RequesterStatus } from "../../schemas/requester"
 
 const IntakePage: React.FC = () => {
   const [session] = useSession()
@@ -43,6 +46,7 @@ const IntakePage: React.FC = () => {
   const immediateFoodNeedsRef = useRef<HTMLInputElement>()
   const waitlist9mrRef = useRef<HTMLInputElement>()
   const newNotesRef = useRef<HTMLTextAreaElement>()
+  const [currentStatus, setCurrentStatus] = useState<string>()
 
   if (isError)
     return (
@@ -94,8 +98,8 @@ const IntakePage: React.FC = () => {
           <Value>
             {record.fields[
               "Which of these ways are best to get in touch with you?"
-            ].map((t) => (
-              <div>{t}</div>
+            ]?.map((t) => (
+              <div key={t}>{t}</div>
             ))}
           </Value>
         </Field>
@@ -134,7 +138,7 @@ const IntakePage: React.FC = () => {
           <Value>
             <Checkbox
               ref={groceryNeedsRef}
-              defaultIsChecked={record.fields["Has grocery needs"]}
+              defaultChecked={record.fields["Has grocery needs"]}
             />
           </Value>
         </Field>
@@ -144,7 +148,7 @@ const IntakePage: React.FC = () => {
           <Value>
             <Checkbox
               ref={immediateFoodNeedsRef}
-              defaultIsChecked={record.fields["Needs immediate food delivery"]}
+              defaultChecked={record.fields["Needs immediate food delivery"]}
             />
           </Value>
         </Field>
@@ -153,7 +157,7 @@ const IntakePage: React.FC = () => {
           <Label>9MR Waitlist</Label>
           <Checkbox
             ref={waitlist9mrRef}
-            defaultIsChecked={record.fields["9MR wait list"]}
+            defaultChecked={record.fields["9MR wait list"]}
           />
         </Field>
 
@@ -166,9 +170,40 @@ const IntakePage: React.FC = () => {
               my={3}
               maxW="40em"
               placeholder="Add more intake notes"
+              display="block"
             ></Textarea>
           </Value>
         </Field>
+
+        {(record.fields?.Status === RequesterStatus.Intake ||
+          record.fields?.Status === RequesterStatus.ResolvedAble ||
+          record.fields?.Status === RequesterStatus.ResolvedDuplicate) && (
+          <>
+            <SectionName>Status</SectionName>
+
+            <Field>
+              <Label>Current status</Label>
+              <Value>
+                <RadioGroup
+                  defaultValue={record.fields.Status}
+                  onChange={(status) => setCurrentStatus(status as string)}
+                >
+                  <Stack direction="column">
+                    <Radio mr={6} value={RequesterStatus.Intake}>
+                      {RequesterStatus.Intake}
+                    </Radio>
+                    <Radio mr={6} value={RequesterStatus.ResolvedAble}>
+                      {RequesterStatus.ResolvedAble}
+                    </Radio>
+                    <Radio mr={6} value={RequesterStatus.ResolvedDuplicate}>
+                      {RequesterStatus.ResolvedDuplicate}
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              </Value>
+            </Field>
+          </>
+        )}
       </Record>
 
       <Button
@@ -181,6 +216,7 @@ const IntakePage: React.FC = () => {
           updatedFields["Needs immediate food delivery"] =
             immediateFoodNeedsRef.current.checked
           updatedFields["9MR wait list"] = waitlist9mrRef.current.checked
+          updatedFields.Status = currentStatus
 
           // append new notes, if any
           const newNotes = newNotesRef.current.value.trim()

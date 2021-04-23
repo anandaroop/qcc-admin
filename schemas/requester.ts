@@ -33,7 +33,7 @@ export interface RequesterFields {
   "Point person": string[]
 
   /** Status (fld4AUQU48pbrjafM) -- singleSelect */
-  Status: unknown
+  Status: string
 
   /** How soon do you need support? (fldFxRRTP6FbdBhpE) -- singleSelect */
   "How soon do you need support?": unknown
@@ -190,4 +190,21 @@ export interface RequesterFields {
 
   /** Intake form (fld9DTKuWX7NQEYm8) -- button */
   "Intake form": unknown
+}
+
+export enum RequesterStatus {
+  New = "New - Needs intake",
+  Intake = "Intake in progress",
+  ResolvedAble = "Resolved - Able to Fill Need",
+  ResolvedDuplicate = "Resolved - Duplicate",
+
+  // Waiting for a response from them
+  // Needs volunteer
+  // In Progress - We Take Responsibility For This (DO NOT USE THIS
+  // Scheduled with volunteer
+  // Unable to contact
+  // We Can’t Take Responsibility for This
+  // EMERGENCY- Has Urgent Needs to be
+  // Resolved - Follow up next week
+  // Resolved - Cancelled
 }
