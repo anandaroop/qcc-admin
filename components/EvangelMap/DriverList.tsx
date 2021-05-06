@@ -332,6 +332,9 @@ const Recipient: React.FC<RecipientProps> = (props) => {
             >
               {recipient.fields["Address (computed)"]}
             </a>
+            <Text fontSize="small">
+              {recipient.fields.NeighborhoodLookup?.[0]}
+            </Text>
           </div>
 
           <div className="phone" style={withBlurredPII()}>

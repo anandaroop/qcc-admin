@@ -41,6 +41,9 @@ export interface RecipientFields {
   /** ID of the linked Neighborhood table record for this driver */
   Neighborhood: string[]
 
+  /** Name of the linked Neighborhood table record for this driver */
+  NeighborhoodLookup: string[]
+
   /** Phone lookup for the linked Request table record */
   Phone: string[]
 
