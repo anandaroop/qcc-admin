@@ -190,6 +190,9 @@ export interface RequesterFields {
 
   /** Intake form (fld9DTKuWX7NQEYm8) -- button */
   "Intake form": unknown
+
+  /** Has received cash grant */
+  "Has received cash grant": boolean
 }
 
 export enum RequesterStatus {

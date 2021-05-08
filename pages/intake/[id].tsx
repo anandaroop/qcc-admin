@@ -16,12 +16,30 @@ import {
   Radio,
 } from "@chakra-ui/react"
 import { useSession } from "next-auth/client"
-import { isEqual, pick, pickBy } from "lodash"
+import { isEqual, pick, pickBy, uniq } from "lodash"
 
 import { Layout } from "../../components/Layout"
 import { Title } from "../../components/Title"
-import { useAirtableRecord, useAirtableRecordUpdate } from "../../lib/hooks"
+import {
+  useAirtableRecord,
+  useAirtableRecords,
+  useAirtableRecordUpdate,
+} from "../../lib/hooks"
 import { RequesterFields, RequesterStatus } from "../../schemas/requester"
+
+const formatCreatedDate = (
+  record: Airtable.Record<RequesterFields>
+): string => {
+  const created = record.fields.Created
+  if (!created) return "n/a"
+
+  const date = new Date(created)
+  const y = date.getFullYear()
+  const m = date.getMonth() + 1
+  const d = date.getDate()
+
+  return `${m}/${d}/${y}`
+}
 
 const IntakePage: React.FC = () => {
   const [session] = useSession()
@@ -29,6 +47,7 @@ const IntakePage: React.FC = () => {
   const { id } = router.query
   const toast = useToast()
 
+  // fetch the current record
   const { record, error, isLoading, isError, mutate } = useAirtableRecord<
     RequesterFields
   >({
@@ -36,10 +55,40 @@ const IntakePage: React.FC = () => {
     recordId: id as string,
   })
 
+  // prepare to update the current record
   const { updateRecord } = useAirtableRecordUpdate<RequesterFields>({
     tableIdOrName: "Requesters",
     recordId: id as string,
   })
+
+  // fetch records related to the current record
+  const relatedIds = record?.fields["Related To"] || []
+  const clauses = relatedIds.map((id) => `RECORD_ID() = '${id}'`)
+  const formula = `OR(${clauses.join(", ")})`
+  const {
+    records: relatedRecords,
+    isLoading: relatedIsLoading,
+    isError: relatedIsError,
+  } = useAirtableRecords<RequesterFields>({
+    tableIdOrName: "Requesters",
+    filterByFormula: formula,
+  })
+
+  // cash grant, either this record or related?
+  const allRecords = [record, ...(relatedRecords || [])]
+  const someRelatedRecordHasReceivedCashGrant = allRecords
+    ?.map((r) => r?.fields?.["Has received cash grant"])
+    ?.some(Boolean)
+
+  //  if so, dates
+  let dates: string
+  if (someRelatedRecordHasReceivedCashGrant) {
+    dates = uniq(
+      allRecords
+        .filter((r) => r?.fields?.["Has received cash grant"])
+        .map(formatCreatedDate)
+    ).join(", ")
+  }
 
   // fields that can be updated via the form
   const groceryNeedsRef = useRef<HTMLInputElement>()
@@ -48,7 +97,7 @@ const IntakePage: React.FC = () => {
   const newNotesRef = useRef<HTMLTextAreaElement>()
   const [currentStatus, setCurrentStatus] = useState<string>()
 
-  if (isError)
+  if (isError || relatedIsError)
     return (
       <Layout>
         <Title>Error</Title>
@@ -59,7 +108,7 @@ const IntakePage: React.FC = () => {
       </Layout>
     )
 
-  if (isLoading)
+  if (isLoading || relatedIsLoading)
     return (
       <Layout>
         <Title>Loading Intake Form…</Title>
@@ -132,6 +181,22 @@ const IntakePage: React.FC = () => {
         </Field>
 
         <SectionName>Needs</SectionName>
+
+        <Field>
+          <Label>Has received cash grant?</Label>
+          <Value>
+            {someRelatedRecordHasReceivedCashGrant ? (
+              <>
+                <Text as="span">Yes</Text>
+                <Text fontWeight={300} as="span">
+                  , on request(s) dated: {dates}
+                </Text>
+              </>
+            ) : (
+              <Text fontWeight={300}>None recorded</Text>
+            )}
+          </Value>
+        </Field>
 
         <Field>
           <Label>Has grocery needs?</Label>
