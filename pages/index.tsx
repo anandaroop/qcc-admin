@@ -24,14 +24,10 @@ const Home: React.FC = () => {
       </Text>
 
       <Flex flexDir={["column", "column", "row"]} wrap="wrap">
-        <CardLink
-          title="Sign-in"
-          href={process.env.NEXT_PUBLIC_WEEKLY_SIGN_IN_FORM_URL}
-          external
-        >
+        <CardLink title="Sign-in" href="/sign-in">
           <Text>
             Fill out this form when attending, e.g. the weekly all-hands
-            meetings. <PinCode />
+            meetings.
           </Text>
         </CardLink>
 
@@ -83,7 +79,7 @@ const Home: React.FC = () => {
         >
           <Text>
             Fill out this form to request access to one of our systems or
-            accounts (e.g. Airtable, social media accounts, financial trackers).{" "}
+            accounts (e.g. Airtable, social media accounts, financial trackers).
             <PinCode />
           </Text>
         </CardLink>
