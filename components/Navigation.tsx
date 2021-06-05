@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react"
 import { signOut, useSession } from "next-auth/client"
 
+import { PII } from "../lib/blurred-pii"
+
 export const Navigation: React.FC = () => {
   const [session] = useSession()
 
@@ -32,7 +34,7 @@ export const Navigation: React.FC = () => {
         <Flex>
           <Menu>
             <MenuButton as={Button} variant="outline">
-              {session.user.name}
+              <PII>{session.user.name}</PII>
             </MenuButton>
             <MenuList>
               <MenuItem
