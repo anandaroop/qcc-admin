@@ -23,9 +23,21 @@ export const BlurredPIIProvider: React.FC<BlurredPIIProviderProps> = ({
   shouldBlur,
   children,
 }) => {
+  const isCurrentlyBlurred = shouldBlur || shouldForcePIIBlur()
   return (
-    <BlurredPIIContext.Provider value={shouldBlur}>
+    <BlurredPIIContext.Provider value={isCurrentlyBlurred}>
       {children}
     </BlurredPIIContext.Provider>
   )
+}
+
+/**
+ * Check URL for a magic `pii` parameter that will force
+ * the blur to be enabled on a specific request
+ */
+const shouldForcePIIBlur = (): boolean => {
+  const urlContainsMagicParam = new URLSearchParams(window.location.search).has(
+    "pii"
+  )
+  return urlContainsMagicParam
 }
