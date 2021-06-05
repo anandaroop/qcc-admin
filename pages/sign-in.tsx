@@ -10,11 +10,17 @@ import {
   Spinner,
 } from "@chakra-ui/react"
 
+import { parseISO, format } from "date-fns"
+
 import { Title } from "../components/Title"
 import { Layout } from "../components/Layout"
 import { useAirtableRecords, useAirtableRecordCreate } from "../lib/hooks"
 import { useSession } from "next-auth/client"
 import { MeetingFields } from "../schemas/meeting"
+
+const prettyDate = (date: Date) => {
+  return format(date, "eee, PPP")
+}
 
 const SignInPage: React.FC = () => {
   const [session, loading] = useSession()
@@ -28,7 +34,7 @@ const SignInPage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Sign-In for {new Date().toLocaleDateString()}</Title>
+      <Title>Sign-In for {prettyDate(new Date())}</Title>
 
       <SignInForm
         name={session.user.name}
@@ -126,19 +132,27 @@ const SignInForm: React.FC<SignInFormProps> = (props) => {
         </Text>
 
         <RadioGroup onChange={setMeetingId} value={meetingId}>
-          {meetings.map((meeting) => (
-            <Box my={2} key={meeting.id}>
-              <Radio size="lg" value={meeting.id} bg="gray.100" display="block">
-                <Text as="span" fontSize="1.25em" fontWeight="bold">
-                  {meeting.fields.Group}
-                </Text>
-                <Text as="span" fontSize="1.25em" ml="0.5em">
-                  {/* TODO: sup with this date?? (treated as UTC?) */}
-                  {new Date(meeting.fields.Date).toLocaleDateString()}
-                </Text>
-              </Radio>
-            </Box>
-          ))}
+          {meetings.map((meeting) => {
+            const formattedDate = prettyDate(parseISO(meeting.fields.Date))
+
+            return (
+              <Box my={2} key={meeting.id}>
+                <Radio
+                  size="lg"
+                  value={meeting.id}
+                  bg="gray.100"
+                  display="block"
+                >
+                  <Text as="span" fontSize="1.25em" fontWeight="bold">
+                    {meeting.fields.Group}
+                  </Text>
+                  <Text as="span" fontSize="1.25em" ml="0.5em">
+                    {formattedDate}
+                  </Text>
+                </Radio>
+              </Box>
+            )
+          })}
         </RadioGroup>
 
         <Button
