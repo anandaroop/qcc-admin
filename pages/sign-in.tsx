@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import {
   Text,
   Box,
@@ -17,6 +17,7 @@ import { Layout } from "../components/Layout"
 import { useAirtableRecords, useAirtableRecordCreate } from "../lib/hooks"
 import { useSession } from "next-auth/client"
 import { MeetingFields } from "../schemas/meeting"
+import { PII } from "../lib/blurred-pii"
 
 const prettyDate = (date: Date) => {
   return format(date, "eee, PPP")
@@ -119,10 +120,10 @@ const SignInForm: React.FC<SignInFormProps> = (props) => {
         </Text>
 
         <Text as="span" fontWeight="bold">
-          {name}
+          <PII blurAmount={15}>{name}</PII>
         </Text>
         <Text as="span" ml={1} color="gray.500">
-          ({email})
+          (<PII blurAmount={15}>{email}</PII>)
         </Text>
       </Box>
 
