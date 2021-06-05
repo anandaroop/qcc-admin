@@ -35,7 +35,7 @@ const SignInPage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Sign-In for {prettyDate(new Date())}</Title>
+      <Title>Sign-in for {prettyDate(new Date())}</Title>
 
       <SignInForm
         name={session.user.name}
@@ -55,8 +55,7 @@ interface SignInFormProps {
 const SignInForm: React.FC<SignInFormProps> = (props) => {
   const { name, email, meetings } = props
 
-  const isOnlyOneMeeting = meetings.length === 1
-  const initialSelection = isOnlyOneMeeting ? meetings[0].id : null
+  const initialSelection = meetings.length === 1 ? meetings[0].id : null
 
   const [meetingId, setMeetingId] = useState<string | number>(initialSelection)
 
@@ -129,32 +128,38 @@ const SignInForm: React.FC<SignInFormProps> = (props) => {
 
       <Box my={8}>
         <Text color="red.500" fontWeight={700}>
-          I am attending {isOnlyOneMeeting ? "" : "(choose one)"}
+          I am attending {meetings.length <= 1 ? "" : "(choose one)"}
         </Text>
 
-        <RadioGroup onChange={setMeetingId} value={meetingId}>
-          {meetings.map((meeting) => {
-            const formattedDate = prettyDate(parseISO(meeting.fields.Date))
+        {meetings.length ? (
+          <RadioGroup onChange={setMeetingId} value={meetingId}>
+            {meetings.map((meeting) => {
+              const formattedDate = prettyDate(parseISO(meeting.fields.Date))
 
-            return (
-              <Box my={2} key={meeting.id}>
-                <Radio
-                  size="lg"
-                  value={meeting.id}
-                  bg="gray.100"
-                  display="block"
-                >
-                  <Text as="span" fontSize="1.25em" fontWeight="bold">
-                    {meeting.fields.Group}
-                  </Text>
-                  <Text as="span" fontSize="1.25em" ml="0.5em">
-                    {formattedDate}
-                  </Text>
-                </Radio>
-              </Box>
-            )
-          })}
-        </RadioGroup>
+              return (
+                <Box my={2} key={meeting.id}>
+                  <Radio
+                    size="lg"
+                    value={meeting.id}
+                    bg="gray.100"
+                    display="block"
+                  >
+                    <Text as="span" fontSize="1.25em" fontWeight="bold">
+                      {meeting.fields.Group}
+                    </Text>
+                    <Text as="span" fontSize="1.25em" ml="0.5em">
+                      {formattedDate}
+                    </Text>
+                  </Radio>
+                </Box>
+              )
+            })}
+          </RadioGroup>
+        ) : (
+          <Text fontStyle="italic">
+            There are no meetings scheduled for today
+          </Text>
+        )}
 
         <Button
           size="lg"
