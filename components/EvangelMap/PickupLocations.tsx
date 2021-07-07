@@ -31,6 +31,10 @@ export const PICKUP_LOCATIONS: PickupLocation[] = [
     name: "Connected Chef",
     address: "4909 5th St, Long Island City, Queens NY",
   },
+  {
+    name: "Dutch Kills CSA",
+    address: "37-10 36th Avenue, Dutch Kills, Queens NY",
+  },
 ]
 
 export const PickupLocations: React.FC = () => {
