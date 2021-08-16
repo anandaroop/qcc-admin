@@ -1,11 +1,17 @@
+/* eslint-disable no-irregular-whitespace */
+import { useState } from "react"
 import { useRouter } from "next/router"
 import { Box, Heading, Link, Spinner, Text } from "@chakra-ui/react"
+import * as _ from "lodash"
 
 import { DriverFields } from "../../../components/EvangelMap/store/drivers"
 import { useAirtableRecord, useAirtableRecords } from "../../../lib/hooks"
 import { Layout } from "../../../components/Layout"
 import { Title } from "../../../components/Title"
-import { RecipientFields } from "../../../components/EvangelMap/store/recipients"
+import {
+  RecipientFields,
+  RecipientRecord,
+} from "../../../components/EvangelMap/store/recipients"
 
 const DriverPage: React.FC = () => {
   const router = useRouter()
@@ -91,10 +97,14 @@ const DriverPage: React.FC = () => {
 
             <Link href={`tel:${recipient.fields.Phone}`}>
               <Box background="gray.50" p={4} my={4}>
-                <Text fontWeight="bold">🗣📞 {recipient.fields.Phone}</Text>
+                <Text fontWeight="bold">💬 📞 {recipient.fields.Phone}</Text>
                 <Text color="gray.500">{recipient.fields.Language}</Text>
               </Box>
             </Link>
+
+            <LocalStorageToggle recipient={recipient} attr="contacted" />
+            <LocalStorageToggle recipient={recipient} attr="reached" />
+            <LocalStorageToggle recipient={recipient} attr="delivered" />
           </Box>
         )
       })}
@@ -109,6 +119,60 @@ const googleMapsDirectionsUrl = (address: string) => {
     destination: [address, "Queens, NY"].join(", "),
   })
   return `https://www.google.com/maps/dir/?${params.toString()}`
+}
+
+function generateKey(recipient: RecipientRecord, attributeName: string) {
+  const d = new Date()
+  return [
+    d.getFullYear(),
+    d.getMonth(),
+    d.getDate(),
+    recipient.id,
+    attributeName,
+  ].join("-")
+}
+
+function useLocalStorage<T>(
+  key: string,
+  defaultValue: T
+): [() => T, (value: T) => void] {
+  const getter = (): T => {
+    const stringified = window.localStorage.getItem(key)
+    if (!stringified) return defaultValue
+    return JSON.parse(stringified)
+  }
+
+  const setter = (value: T) => {
+    const stringified = JSON.stringify(value)
+    window.localStorage.setItem(key, stringified)
+  }
+
+  return [getter, setter]
+}
+
+const LocalStorageToggle: React.FC<{
+  recipient: RecipientRecord
+  attr: string
+}> = ({ recipient, attr }) => {
+  const storageKey = generateKey(recipient, attr.toLowerCase().trim())
+  const [read, write] = useLocalStorage<boolean>(storageKey, false)
+  const [value, setValue] = useState<boolean>(read())
+
+  return (
+    <Box
+      p={4}
+      my={4}
+      bg={value ? "green.200" : "gray.100"}
+      onClick={() => {
+        setValue((prevState) => {
+          write(!prevState)
+          return !prevState
+        })
+      }}
+    >
+      {_.startCase(attr)}? {value ? "Yes" : "No"}
+    </Box>
+  )
 }
 
 export default DriverPage
