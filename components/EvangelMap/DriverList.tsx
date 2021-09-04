@@ -184,7 +184,12 @@ const Driver: React.FC<DriverProps> = (props) => {
         >
           <div className="driverName">
             <span>
-              <span style={withBlurredPII({ color: "white" })}>
+              <span
+                style={withBlurredPII({ color: "white" })}
+                onClick={() => {
+                  window.location.href = `route-planning/driver/${driver.id}`
+                }}
+              >
                 {driver.fields.Name}
               </span>{" "}
               ({recipientIds?.length || 0})
