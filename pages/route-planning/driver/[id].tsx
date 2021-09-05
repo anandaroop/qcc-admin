@@ -1,10 +1,13 @@
 /* eslint-disable no-irregular-whitespace */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Box, Heading, Link, Spinner, Text } from "@chakra-ui/react"
 import * as _ from "lodash"
 
-import { DriverFields } from "../../../components/EvangelMap/store/drivers"
+import {
+  DriverFields,
+  DriverRecord,
+} from "../../../components/EvangelMap/store/drivers"
 import { useAirtableRecord, useAirtableRecords } from "../../../lib/hooks"
 import { Layout } from "../../../components/Layout"
 import { Title } from "../../../components/Title"
@@ -12,6 +15,7 @@ import {
   RecipientFields,
   RecipientRecord,
 } from "../../../components/EvangelMap/store/recipients"
+import { PII } from "../../../lib/blurred-pii"
 
 const DriverPage: React.FC = () => {
   const router = useRouter()
@@ -55,28 +59,50 @@ const DriverPage: React.FC = () => {
       return r.fields.Driver[0] == driver.id
     })
     .sort((a, b) => {
-      const aa = a.fields["Suggested order"]
-      const bb = b.fields["Suggested order"]
-      if (aa < bb) return -1
-      if (aa > bb) return 1
+      const orderA = a.fields["Suggested order"] || Number.MAX_VALUE
+      const orderB = b.fields["Suggested order"] || Number.MAX_VALUE
+      if (orderA < orderB) return -1
+      if (orderA > orderB) return 1
       return 0
     })
 
+  return <Itinerary driver={driver} recipients={recipients} />
+}
+
+const Itinerary: React.FC<{
+  driver: DriverRecord
+  recipients: RecipientRecord[]
+}> = ({ driver, recipients }) => {
+  //  on mount, expire any stale local storage for this app
+  useEffect(() => {
+    cleanUpLocalStorage(driver, recipients)
+  }, [])
+
   return (
     <Layout>
-      <Title>Driver Route: {driver.fields.Name}</Title>
+      <Title pii={true}>{driver.fields.Name}’s Route</Title>
 
       {recipients.map((recipient) => {
         return (
           <Box my={5} key={recipient.id}>
             <Heading size="lg">
               {recipient.fields["Suggested order"]}.{" "}
-              {recipient.fields.NameLookup}
+              <PII blurAmount={12} color="gray">
+                {recipient.fields.NameLookup}
+              </PII>
             </Heading>
 
-            <Text my={4}>{recipient.fields["Delivery notes"]}</Text>
+            {recipient.fields["Delivery notes"] && (
+              <Text my={4} color="gray.500">
+                📝 <PII color="gray">{recipient.fields["Delivery notes"]}</PII>
+              </Text>
+            )}
 
-            <Text my={4}>{recipient.fields["Recipient notes"]}</Text>
+            {recipient.fields["Recipient notes"] && (
+              <Text my={4} color="gray.500">
+                📝 <PII color="gray">{recipient.fields["Recipient notes"]}</PII>
+              </Text>
+            )}
 
             <Text my={4}>{recipient.fields["Dietary restrictions"]}</Text>
 
@@ -84,27 +110,54 @@ const DriverPage: React.FC = () => {
               href={googleMapsDirectionsUrl(
                 recipient.fields["Address (computed)"]
               )}
+              _active={{ "text-decoration": "none" }}
             >
-              <Box background="gray.50" p={4} my={4}>
+              <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">
-                  🚦🚘 {recipient.fields["Address (computed)"]}
+                  🚦🚘{" "}
+                  <PII color="gray">
+                    {recipient.fields["Address (computed)"]}
+                  </PII>
                 </Text>
                 <Text color="gray.500">
                   {recipient.fields.NeighborhoodLookup}
                 </Text>
+                <Text mt={2} color="gray.500" fontSize="0.8em">
+                  Tap for driving directions.
+                </Text>
               </Box>
             </Link>
 
-            <Link href={`tel:${recipient.fields.Phone}`}>
-              <Box background="gray.50" p={4} my={4}>
-                <Text fontWeight="bold">💬 📞 {recipient.fields.Phone}</Text>
+            <Link
+              href={`tel:${recipient.fields.Phone}`}
+              _active={{ "text-decoration": "none" }}
+            >
+              <Box background="gray.100" p={4} my={4}>
+                <Text fontWeight="bold">
+                  💬 📞 <PII color="gray">{recipient.fields.Phone}</PII>
+                </Text>
                 <Text color="gray.500">{recipient.fields.Language}</Text>
+                <Text mt={2} color="gray.500" fontSize="0.8em">
+                  Tap to place a call. Long press to send a text.
+                </Text>
               </Box>
             </Link>
 
-            <LocalStorageToggle recipient={recipient} attr="contacted" />
-            <LocalStorageToggle recipient={recipient} attr="reached" />
-            <LocalStorageToggle recipient={recipient} attr="delivered" />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="contacted"
+            />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="reached"
+            />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="delivered"
+            />
           </Box>
         )
       })}
@@ -121,15 +174,42 @@ const googleMapsDirectionsUrl = (address: string) => {
   return `https://www.google.com/maps/dir/?${params.toString()}`
 }
 
-function generateKey(recipient: RecipientRecord, attributeName: string) {
+function generateKey(
+  driver: DriverRecord,
+  recipient: RecipientRecord,
+  attributeName: string
+) {
   const d = new Date()
   return [
+    "driver-toggle",
     d.getFullYear(),
-    d.getMonth(),
+    d.getMonth() + 1,
     d.getDate(),
-    recipient.id,
+    driver.id,
     attributeName,
+    recipient.id,
   ].join("-")
+}
+
+const cleanUpLocalStorage = (
+  driver: DriverRecord,
+  recipients: RecipientRecord[]
+) => {
+  const attributes = ["contacted", "reached", "delivered"]
+  const validKeys: string[] = recipients
+    .map((r) => {
+      return attributes.map((a) => {
+        return generateKey(driver, r, a)
+      })
+    })
+    .flat()
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key.startsWith("driver-toggle") && !validKeys.includes(key)) {
+      localStorage.removeItem(key)
+    }
+  }
 }
 
 function useLocalStorage<T>(
@@ -151,10 +231,11 @@ function useLocalStorage<T>(
 }
 
 const LocalStorageToggle: React.FC<{
+  driver: DriverRecord
   recipient: RecipientRecord
   attr: string
-}> = ({ recipient, attr }) => {
-  const storageKey = generateKey(recipient, attr.toLowerCase().trim())
+}> = ({ driver, recipient, attr }) => {
+  const storageKey = generateKey(driver, recipient, attr.toLowerCase().trim())
   const [read, write] = useLocalStorage<boolean>(storageKey, false)
   const [value, setValue] = useState<boolean>(read())
 
