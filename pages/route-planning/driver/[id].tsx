@@ -12,6 +12,7 @@ import {
   RecipientFields,
   RecipientRecord,
 } from "../../../components/EvangelMap/store/recipients"
+import { PII } from "../../../lib/blurred-pii"
 
 const DriverPage: React.FC = () => {
   const router = useRouter()
@@ -64,25 +65,27 @@ const DriverPage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>{driver.fields.Name}’s Route</Title>
+      <Title pii={true}>{driver.fields.Name}’s Route</Title>
 
       {recipients.map((recipient) => {
         return (
           <Box my={5} key={recipient.id}>
             <Heading size="lg">
               {recipient.fields["Suggested order"]}.{" "}
-              {recipient.fields.NameLookup}
+              <PII blurAmount={12} color="gray">
+                {recipient.fields.NameLookup}
+              </PII>
             </Heading>
 
             {recipient.fields["Delivery notes"] && (
               <Text my={4} color="gray.500">
-                📝 {recipient.fields["Delivery notes"]}
+                📝 <PII color="gray">{recipient.fields["Delivery notes"]}</PII>
               </Text>
             )}
 
             {recipient.fields["Recipient notes"] && (
               <Text my={4} color="gray.500">
-                📝 {recipient.fields["Recipient notes"]}
+                📝 <PII color="gray">{recipient.fields["Recipient notes"]}</PII>
               </Text>
             )}
 
@@ -96,7 +99,10 @@ const DriverPage: React.FC = () => {
             >
               <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">
-                  🚦🚘 {recipient.fields["Address (computed)"]}
+                  🚦🚘{" "}
+                  <PII color="gray">
+                    {recipient.fields["Address (computed)"]}
+                  </PII>
                 </Text>
                 <Text color="gray.500">
                   {recipient.fields.NeighborhoodLookup}
@@ -112,7 +118,9 @@ const DriverPage: React.FC = () => {
               _active={{ "text-decoration": "none" }}
             >
               <Box background="gray.100" p={4} my={4}>
-                <Text fontWeight="bold">💬 📞 {recipient.fields.Phone}</Text>
+                <Text fontWeight="bold">
+                  💬 📞 <PII color="gray">{recipient.fields.Phone}</PII>
+                </Text>
                 <Text color="gray.500">{recipient.fields.Language}</Text>
                 <Text mt={2} color="gray.500" fontSize="0.8em">
                   Tap to place a call. Long press to send a text.

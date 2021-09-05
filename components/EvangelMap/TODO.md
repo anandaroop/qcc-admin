@@ -1,5 +1,7 @@
 # TODO
   - [ ] submit driver report?
+  - [ ] flush old localstorage data
+  - [x] driver ui pii
   - [x] always sort by suggested order
   - [x] driver ui
   - [x] copying from a new notes field on the Request table specifically for recurring  --> Notes
