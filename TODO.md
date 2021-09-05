@@ -1,2 +1,4 @@
+- [x] fix nav on mobile
+- [ ] better local dev (fix blur/auth problems)
 - [ ] non-Slack oauth method
 - [ ] rec id lookup?

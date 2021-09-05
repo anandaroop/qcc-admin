@@ -1,4 +1,7 @@
 # TODO
+  - [ ] submit driver report?
+  - [x] always sort by suggested order
+  - [x] driver ui
   - [x] copying from a new notes field on the Request table specifically for recurring  --> Notes
   - [x] separate field for Driver Notes?
   - [x] make easier to switch to tmp dev base
