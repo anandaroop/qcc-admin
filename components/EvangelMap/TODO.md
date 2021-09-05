@@ -1,6 +1,6 @@
 # TODO
   - [ ] submit driver report?
-  - [ ] flush old localstorage data
+  - [x] flush old localstorage data
   - [x] driver ui pii
   - [x] always sort by suggested order
   - [x] driver ui

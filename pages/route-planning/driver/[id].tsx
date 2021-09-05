@@ -1,10 +1,13 @@
 /* eslint-disable no-irregular-whitespace */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Box, Heading, Link, Spinner, Text } from "@chakra-ui/react"
 import * as _ from "lodash"
 
-import { DriverFields } from "../../../components/EvangelMap/store/drivers"
+import {
+  DriverFields,
+  DriverRecord,
+} from "../../../components/EvangelMap/store/drivers"
 import { useAirtableRecord, useAirtableRecords } from "../../../lib/hooks"
 import { Layout } from "../../../components/Layout"
 import { Title } from "../../../components/Title"
@@ -62,6 +65,18 @@ const DriverPage: React.FC = () => {
       if (aa > bb) return 1
       return 0
     })
+
+  return <Itinerary driver={driver} recipients={recipients} />
+}
+
+const Itinerary: React.FC<{
+  driver: DriverRecord
+  recipients: RecipientRecord[]
+}> = ({ driver, recipients }) => {
+  //  on mount, expire any stale local storage for this app
+  useEffect(() => {
+    cleanUpLocalStorage(driver, recipients)
+  }, [])
 
   return (
     <Layout>
@@ -128,9 +143,21 @@ const DriverPage: React.FC = () => {
               </Box>
             </Link>
 
-            <LocalStorageToggle recipient={recipient} attr="contacted" />
-            <LocalStorageToggle recipient={recipient} attr="reached" />
-            <LocalStorageToggle recipient={recipient} attr="delivered" />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="contacted"
+            />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="reached"
+            />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="delivered"
+            />
           </Box>
         )
       })}
@@ -147,15 +174,42 @@ const googleMapsDirectionsUrl = (address: string) => {
   return `https://www.google.com/maps/dir/?${params.toString()}`
 }
 
-function generateKey(recipient: RecipientRecord, attributeName: string) {
+function generateKey(
+  driver: DriverRecord,
+  recipient: RecipientRecord,
+  attributeName: string
+) {
   const d = new Date()
   return [
+    "driver-toggle",
     d.getFullYear(),
-    d.getMonth(),
+    d.getMonth() + 1,
     d.getDate(),
-    recipient.id,
+    driver.id,
     attributeName,
+    recipient.id,
   ].join("-")
+}
+
+const cleanUpLocalStorage = (
+  driver: DriverRecord,
+  recipients: RecipientRecord[]
+) => {
+  const attributes = ["contacted", "reached", "delivered"]
+  const validKeys: string[] = recipients
+    .map((r) => {
+      return attributes.map((a) => {
+        return generateKey(driver, r, a)
+      })
+    })
+    .flat()
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key.startsWith("driver-toggle") && !validKeys.includes(key)) {
+      localStorage.removeItem(key)
+    }
+  }
 }
 
 function useLocalStorage<T>(
@@ -177,10 +231,11 @@ function useLocalStorage<T>(
 }
 
 const LocalStorageToggle: React.FC<{
+  driver: DriverRecord
   recipient: RecipientRecord
   attr: string
-}> = ({ recipient, attr }) => {
-  const storageKey = generateKey(recipient, attr.toLowerCase().trim())
+}> = ({ driver, recipient, attr }) => {
+  const storageKey = generateKey(driver, recipient, attr.toLowerCase().trim())
   const [read, write] = useLocalStorage<boolean>(storageKey, false)
   const [value, setValue] = useState<boolean>(read())
 
