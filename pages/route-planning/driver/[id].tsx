@@ -59,10 +59,10 @@ const DriverPage: React.FC = () => {
       return r.fields.Driver[0] == driver.id
     })
     .sort((a, b) => {
-      const aa = a.fields["Suggested order"]
-      const bb = b.fields["Suggested order"]
-      if (aa < bb) return -1
-      if (aa > bb) return 1
+      const orderA = a.fields["Suggested order"] || Number.MAX_VALUE
+      const orderB = b.fields["Suggested order"] || Number.MAX_VALUE
+      if (orderA < orderB) return -1
+      if (orderA > orderB) return 1
       return 0
     })
 
