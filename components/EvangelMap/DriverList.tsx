@@ -68,8 +68,15 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
     <div className="driver-list">
       <PickupLocations />
       {drivers.map((driver) => {
-        const recipientItinerary = itineraryMap[driver.id]
         const color = colorMap[driver.id]
+        const recipientItinerary = itineraryMap[driver.id]
+        const sortedItinerary = [...(recipientItinerary || [])].sort((a, b) => {
+          const orderA = a.fields["Suggested order"] || Number.MAX_VALUE
+          const orderB = b.fields["Suggested order"] || Number.MAX_VALUE
+          if (orderA < orderB) return -1
+          if (orderA > orderB) return 1
+          return 0
+        })
 
         return (
           <Driver
@@ -81,14 +88,14 @@ export const DriverList: React.FC<DriverListProps> = (props) => {
           >
             {isMinimized && (
               <div style={{ padding: "0.5em 0" }}>
-                {recipientItinerary?.map((_, i) => (
+                {sortedItinerary?.map((_, i) => (
                   <div key={i} className="tick" style={{ background: color }}>
                     {" "}
                   </div>
                 ))}
               </div>
             )}
-            {recipientItinerary?.map((recipient) => (
+            {sortedItinerary?.map((recipient) => (
               <Recipient
                 key={recipient.id}
                 recipient={recipient}
