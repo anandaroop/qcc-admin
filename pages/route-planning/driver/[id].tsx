@@ -111,6 +111,7 @@ const Itinerary: React.FC<{
                 recipient.fields["Address (computed)"]
               )}
               _active={{ "text-decoration": "none" }}
+              _hover={{ "text-decoration": "none" }}
             >
               <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">
@@ -131,6 +132,7 @@ const Itinerary: React.FC<{
             <Link
               href={`tel:${recipient.fields.Phone}`}
               _active={{ "text-decoration": "none" }}
+              _hover={{ "text-decoration": "none" }}
             >
               <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">
