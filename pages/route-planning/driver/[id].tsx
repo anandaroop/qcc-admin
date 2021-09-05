@@ -64,7 +64,7 @@ const DriverPage: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Driver Route: {driver.fields.Name}</Title>
+      <Title>{driver.fields.Name}’s Route</Title>
 
       {recipients.map((recipient) => {
         return (
@@ -74,9 +74,17 @@ const DriverPage: React.FC = () => {
               {recipient.fields.NameLookup}
             </Heading>
 
-            <Text my={4}>{recipient.fields["Delivery notes"]}</Text>
+            {recipient.fields["Delivery notes"] && (
+              <Text my={4} color="gray.500">
+                📝 {recipient.fields["Delivery notes"]}
+              </Text>
+            )}
 
-            <Text my={4}>{recipient.fields["Recipient notes"]}</Text>
+            {recipient.fields["Recipient notes"] && (
+              <Text my={4} color="gray.500">
+                📝 {recipient.fields["Recipient notes"]}
+              </Text>
+            )}
 
             <Text my={4}>{recipient.fields["Dietary restrictions"]}</Text>
 
@@ -84,21 +92,31 @@ const DriverPage: React.FC = () => {
               href={googleMapsDirectionsUrl(
                 recipient.fields["Address (computed)"]
               )}
+              _active={{ "text-decoration": "none" }}
             >
-              <Box background="gray.50" p={4} my={4}>
+              <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">
                   🚦🚘 {recipient.fields["Address (computed)"]}
                 </Text>
                 <Text color="gray.500">
                   {recipient.fields.NeighborhoodLookup}
                 </Text>
+                <Text mt={2} color="gray.500" fontSize="0.8em">
+                  Tap for driving directions.
+                </Text>
               </Box>
             </Link>
 
-            <Link href={`tel:${recipient.fields.Phone}`}>
-              <Box background="gray.50" p={4} my={4}>
+            <Link
+              href={`tel:${recipient.fields.Phone}`}
+              _active={{ "text-decoration": "none" }}
+            >
+              <Box background="gray.100" p={4} my={4}>
                 <Text fontWeight="bold">💬 📞 {recipient.fields.Phone}</Text>
                 <Text color="gray.500">{recipient.fields.Language}</Text>
+                <Text mt={2} color="gray.500" fontSize="0.8em">
+                  Tap to place a call. Long press to send a text.
+                </Text>
               </Box>
             </Link>
 
