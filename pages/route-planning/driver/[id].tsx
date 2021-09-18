@@ -149,16 +149,25 @@ const Itinerary: React.FC<{
               driver={driver}
               recipient={recipient}
               attr="contacted"
+              label="Tried contacting?"
             />
             <LocalStorageToggle
               driver={driver}
               recipient={recipient}
               attr="reached"
+              label="Reached?"
             />
             <LocalStorageToggle
               driver={driver}
               recipient={recipient}
               attr="delivered"
+              label="Delivered (in-person)?"
+            />
+            <LocalStorageToggle
+              driver={driver}
+              recipient={recipient}
+              attr="left"
+              label="Dropped off (unattended)?"
             />
           </Box>
         )
@@ -236,7 +245,8 @@ const LocalStorageToggle: React.FC<{
   driver: DriverRecord
   recipient: RecipientRecord
   attr: string
-}> = ({ driver, recipient, attr }) => {
+  label: string
+}> = ({ driver, recipient, attr, label }) => {
   const storageKey = generateKey(driver, recipient, attr.toLowerCase().trim())
   const [read, write] = useLocalStorage<boolean>(storageKey, false)
   const [value, setValue] = useState<boolean>(read())
@@ -253,7 +263,7 @@ const LocalStorageToggle: React.FC<{
         })
       }}
     >
-      {_.startCase(attr)}? {value ? "Yes" : "No"}
+      {label} {value ? "Yes" : "No"}
     </Box>
   )
 }
